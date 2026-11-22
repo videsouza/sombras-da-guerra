@@ -110,6 +110,116 @@ table.kv th{width:32%;color:var(--dim);font-weight:400;font-family:var(--mono);f
 
 #chips2{grid-column:1;grid-row:3}#inputbar{grid-column:1;grid-row:4}
 
+/* ===== Assistente de criação ===== */
+#wiz{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;background:radial-gradient(ellipse at 50% -20%,#2a2418 0%,var(--bg) 60%)}
+#wiz.on{display:flex}
+.wz-top{display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid var(--line);background:linear-gradient(#1d1a13,#15130e);flex-wrap:wrap}
+.wz-top h2{margin:0;font-size:.92rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ac);white-space:nowrap}
+#wzTabs{display:flex;gap:4px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+#wzTabs::-webkit-scrollbar{display:none}
+.wz-tab{display:flex;align-items:center;gap:7px;background:transparent;border:1px solid transparent;border-radius:999px;padding:5px 12px 5px 6px;color:var(--dim);white-space:nowrap}
+.wz-tab b{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);font-size:.72rem;color:var(--dim)}
+.wz-tab span{font-size:.78rem}
+.wz-tab.ok b{background:var(--grn);border-color:var(--grn);color:#10140a}
+.wz-tab.on{border-color:var(--ac);color:var(--ac2);background:var(--bg3)}
+.wz-tab.on b{background:var(--ac);border-color:var(--ac);color:#1a1405}
+.wz-tab:disabled{opacity:.4;cursor:not-allowed}
+.wz-acts{display:flex;gap:6px}
+.wz-sec{background:var(--bg3);font-size:.72rem;padding:4px 9px}
+.wz-body{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 270px;min-height:0;max-width:1280px;width:100%;margin:0 auto}
+#wzMain{overflow-y:auto;padding:18px 24px 30px;scroll-behavior:auto}
+#wzSide{border-left:1px solid var(--line);background:var(--bg2);padding:14px 16px;overflow-y:auto;font-size:.84rem}
+#wzSide h5{margin:0 0 8px;color:var(--ac);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-family:var(--mono)}
+.wz-l{padding:6px 0;border-bottom:1px dashed var(--line);display:flex;flex-direction:column;gap:1px}
+.wz-l span{font-family:var(--mono);font-size:.66rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.wz-l b{font-weight:600;line-height:1.3}
+.wz-atrs{display:flex;flex-wrap:wrap;gap:3px 8px;font-family:var(--mono);font-size:.74rem;font-weight:400}
+.wz-atrs span.up b{color:var(--ac2)}
+.wz-atrs.big{margin:0 0 10px}.wz-atrs.big span{background:var(--bg3);border:1px solid var(--line);border-radius:4px;padding:2px 7px;font-size:.8rem}
+.wz-foot{display:flex;align-items:center;gap:10px;padding:10px 18px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:#15130e}
+.wz-msg{flex:1;min-width:0;font-size:.86rem;line-height:1.35}
+#wzProx{min-width:150px;padding:9px 16px;font-size:.86rem}
+#wzProx:disabled,#wzAnt:disabled{opacity:.4;cursor:not-allowed}
+.wz-lead{margin:0 0 14px;font-size:1.03rem;max-width:70ch}
+.wz-h{margin:20px 0 8px;color:var(--ac);font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono);display:flex;align-items:center;gap:10px}
+.wz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.wz-grid.wz-sm{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.wz-grid.wz-1{grid-template-columns:1fr}
+.wz-card{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;font-family:var(--serif);font-size:.92rem;line-height:1.35;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:9px 12px;color:var(--tx);cursor:pointer;transition:border-color .12s,background .12s}
+.wz-card b{color:var(--ac2);font-size:.95rem}
+.wz-card span{color:var(--dim);font-size:.82rem}
+.wz-card em{color:var(--ac);font-style:normal;font-size:.76rem;font-family:var(--mono)}
+.wz-card:hover{border-color:var(--ac);color:var(--tx)}
+.wz-card.on{border-color:var(--ac);background:#2b2415;box-shadow:inset 3px 0 0 var(--ac)}
+.wz-card.on b::before{content:"✓ ";color:var(--grn)}
+.wz-card:disabled{opacity:.4;cursor:not-allowed}
+.wz-in{background:var(--bg3);color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font:inherit;font-size:.95rem;width:100%}
+.wz-in:focus{outline:none;border-color:var(--ac)}
+select.wz-in{width:auto;max-width:100%}
+#wzBusca{max-width:320px;margin:0 0 10px}
+.wz-nota{margin:12px 0 0;padding:9px 12px;border-left:3px solid var(--ac);background:var(--bg2);font-size:.9rem;border-radius:0 6px 6px 0}
+.wz-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 6px}
+.wz-det{margin:14px 0;padding:12px 16px;background:var(--bg2);border:1px solid var(--line);border-top:2px solid var(--ac);border-radius:6px}
+.wz-det h3{margin:0 0 4px;color:var(--ac2)}
+.wz-det h5{margin:10px 0 4px;color:var(--ac);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono)}
+.wz-det ul{margin:0;padding-left:18px;font-size:.88rem}
+.wz-cols{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px}
+.wz-tags{display:flex;flex-wrap:wrap;gap:5px;margin:0}
+.wz-tags span{background:var(--bg3);border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:.78rem}
+.small{font-size:.8rem}
+.wz-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:6px 0}
+.wz-f label{display:block;font-family:var(--mono);font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.wz-f label b{color:var(--ac2)}
+.wz-inl{display:flex;gap:6px}.wz-inl .wz-sec{white-space:nowrap;padding:4px 12px}
+.wz-seg{display:flex}.wz-seg button{flex:1;border-radius:0}.wz-seg button:first-child{border-radius:6px 0 0 6px}.wz-seg button:last-child{border-radius:0 6px 6px 0;border-left:0}
+.wz-seg button.on{background:var(--ac);color:#1a1405;border-color:var(--ac);font-weight:700}
+input[type=range]{width:100%;accent-color:var(--ac)}
+.wz-two{display:grid;grid-template-columns:1fr 1.25fr;gap:8px 28px}
+.wz-hd{display:flex;align-items:center;gap:8px;margin-top:6px}.wz-hd .wz-h{margin:0;flex:1}
+.wz-pts{font-family:var(--mono);font-size:.8rem;background:var(--ac);color:#1a1405;border-radius:999px;padding:1px 10px;font-weight:700}
+.wz-pts.z{background:var(--bg3);color:var(--dim);font-weight:400}
+.wz-r{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed #2b261c}
+.wz-r .n{flex:1;min-width:0;font-size:.92rem}
+.wz-r.s .n{font-size:.86rem}
+.wz-r .bar{flex:0 0 90px;height:7px;background:#0e0c09;border:1px solid var(--line);border-radius:4px;overflow:hidden;display:inline-block}
+.wz-r .bar i{display:block;height:100%;background:var(--ac)}
+.wz-r .v{flex:0 0 74px;white-space:nowrap;text-align:right;font-family:var(--mono);font-size:.82rem}.wz-r .v em{font-style:normal;color:var(--dim)}
+.wz-r .v b{color:var(--ac2)}
+.qty{width:28px;height:28px;padding:0;border-radius:50%;font-size:1rem;line-height:1;display:inline-grid;place-items:center;flex:none}
+.qty:disabled{opacity:.3;cursor:not-allowed}
+.pips{display:inline-flex;gap:3px}.pips i{width:10px;height:10px;border-radius:50%;border:1px solid var(--line);background:#0e0c09}
+.pips i.b{background:var(--dim);border-color:var(--dim)}.pips i.a{background:var(--ac);border-color:var(--ac)}
+.wz-cat{margin:6px 0;border:1px solid var(--line);border-radius:6px;background:var(--bg2);padding:0 10px}
+.wz-cat summary{cursor:pointer;padding:7px 0;font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ac)}
+.wz-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:0 0 12px}
+.wz-sum div{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.wz-sum span{display:block;font-family:var(--mono);font-size:.66rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.wz-sum b{font-size:1.05rem;color:var(--ac2)}
+.wz-edit{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.wz-ficha{border-top:1px dashed var(--line);padding-top:8px}.wz-ficha .card{margin-bottom:12px}
+body.wz-on #app{visibility:hidden}
+@media (max-width:860px){
+  .wz-body{grid-template-columns:1fr}#wzSide{display:none}
+  #wzMain{padding:14px 14px 24px}
+  .wz-top{padding:8px 12px;gap:8px}.wz-top h2{font-size:.82rem}.wz-acts{margin-left:auto}
+  #wzTabs{order:3;flex:1 0 100%}
+  .wz-tab span{display:none}.wz-tab.on span{display:inline}.wz-tab{padding:4px 8px 4px 4px}
+  .wz-two,.wz-cols{grid-template-columns:1fr}
+  .wz-grid,.wz-grid.wz-sm{grid-template-columns:1fr 1fr}.wz-grid.wz-1{grid-template-columns:1fr}
+  .wz-foot{padding:8px 12px calc(10px + env(safe-area-inset-bottom));flex-wrap:wrap}.wz-msg{flex:1 0 100%;order:-1}
+  #wzProx{flex:1;min-width:0}#wzAnt{flex:0 0 auto}
+}
+@media (max-width:480px){.wz-grid,.wz-grid.wz-sm{grid-template-columns:1fr}.wz-r .bar{flex-basis:56px}}
+
+table.attr{border-collapse:separate;border-spacing:6px;width:100%;margin:6px 0}
+table.attr td{text-align:center;background:var(--bg3);border:1px solid var(--line);border-radius:6px;padding:5px 2px;font-family:var(--mono);font-size:.9rem;line-height:1.3}
+table.attr td b{color:var(--ac);font-size:.7rem;letter-spacing:.1em}
+.wz-split{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:20px;align-items:start}
+.wz-split .wz-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.wz-split .wz-det{position:sticky;top:0;margin:0;max-height:calc(100vh - 170px);overflow-y:auto}
+.wz-split .wz-cols{grid-template-columns:1fr}
+@media (max-width:1180px){.wz-tab span{display:none}.wz-tab.on span{display:inline}.wz-split{grid-template-columns:1fr}.wz-split .wz-det{position:static;max-height:none}}
+
 </style>
 </head>
 <body>
@@ -145,6 +255,23 @@ table.kv th{width:32%;color:var(--dim);font-weight:400;font-family:var(--mono);f
       <button id="bCarr">Carregar registro de campanha (arquivo ou texto)</button>
     </div>
     <p class="small" style="margin-top:14px">Salva automaticamente no navegador. Use <b>/salvar</b> a qualquer momento para exportar a campanha completa.</p>
+  </div>
+</div>
+
+<div id="wiz" role="dialog" aria-label="Criação de personagem">
+  <div class="wz-top">
+    <h2>Criação de personagem</h2>
+    <div id="wzTabs" role="tablist"></div>
+    <div class="wz-acts"><button type="button" class="wz-sec" data-w="texto" title="Criar o personagem respondendo por texto, passo a passo">⌨ Responder digitando</button><button type="button" class="wz-sec" data-w="cancelar">Cancelar</button></div>
+  </div>
+  <div class="wz-body">
+    <main id="wzMain"></main>
+    <aside id="wzSide"><div id="wzResumo"></div></aside>
+  </div>
+  <div class="wz-foot">
+    <div class="wz-msg"><div id="wzTitulo"></div><div id="wzAviso"></div></div>
+    <button type="button" id="wzAnt" data-w="ant">◀ Voltar</button>
+    <button type="button" id="wzProx" class="pri" data-w="prox">Continuar ▶</button>
   </div>
 </div>
 
@@ -3526,6 +3653,127 @@ function iniciarCampanha() {
   mostrarNoticiasNovas(); autosave();
 }
 
+/* ---- 10b_assistente.js ---- */
+/* =====================================================================
+   10b · Assistente visual de criação — API sem DOM (a interface está em 11b)
+   Trabalha sobre G.cr.d, o mesmo estado do modo digitado; os dois se alternam.
+   ===================================================================== */
+const WIZ = {
+  PASSOS: [
+    { id: 'mundo', nome: 'Mundo', sub: 'Quando a história começa' },
+    { id: 'origem', nome: 'Origem', sub: 'De onde você vem' },
+    { id: 'vocacao', nome: 'Vocação', sub: 'Sua classe' },
+    { id: 'pessoa', nome: 'Pessoa', sub: 'Nome, traços e passado' },
+    { id: 'talentos', nome: 'Talentos', sub: 'Atributos e habilidades' },
+    { id: 'alistamento', nome: 'Alistamento', sub: 'Organização e equipamento' },
+    { id: 'ficha', nome: 'Ficha', sub: 'Revisar e começar' }
+  ],
+  passos() { return G.cr.d.continua ? this.PASSOS.filter(p => p.id !== 'mundo') : this.PASSOS; },
+  /* Abre o assistente: nova criação (opts.sugestao='feb') ou novo personagem no mesmo mundo (opts.continua) */
+  abrir(opts) {
+    opts = opts || {};
+    if (opts.continua) novoPersonagemNoMundo({ assistente: true }); else iniciarCriacao({ sugestao: opts.sugestao, assistente: true });
+    flush(); G.cr.assist = true; G.cr.d.idade = G.cr.d.idade || 26; return this.estado();
+  },
+  /* ---------- catálogo estático (para a interface montar cartões) ---------- */
+  catalogo() {
+    const hdesc = h => { const p = []; if (h.hab) p.push(Object.entries(h.hab).map(([k, v]) => D.HABS[k].nome + ' +' + v).join(', ')); if (h.idiomas) p.push('+' + h.idiomas + ' idioma(s)'); if (h.contatos) p.push('+' + h.contatos + ' contato'); if (h.din) p.push('+' + h.din + ' U'); if (h.mental) p.push((h.mental > 0 ? '+' : '−') + Math.abs(h.mental) + ' mental'); return p.join(' · '); };
+    return {
+      periodos: D.PERIODOS.map(p => ({ nome: p.nome, resumo: p.resumo, entradas: p.entradas.map(e => ({ nome: e.nome, data: dataStr(diaDe(e.data), true), local: D.REGIOES[e.regiao].nome, desc: e.desc })) })),
+      nacoes: D.NAC_ORDEM.map(k => ({ id: k, nome: D.NACOES[k].nome, adj: D.NACOES[k].adj, desc: D.NACOES[k].desc })),
+      atrs: Object.entries(D.ATRS).map(([id, nome]) => ({ id, nome })),
+      classes: Object.values(D.CLASSES).map(c => ({ id: c.id || Object.keys(D.CLASSES).find(k => D.CLASSES[k] === c), nome: c.nome, desc: c.desc, atr: c.atr, vant: c.vant, desv: c.desv, habs: Object.entries(c.hab).sort((a, b) => b[1] - a[1]).map(([k, v]) => [D.HABS[k].nome, v]), excl: c.excl.nome + ' — ' + c.excl.desc, ativa: c.excl.ativa.nome, evol: c.evol.map(e => e.nome) })),
+      tracos: D.TRACOS_PJ.map(t => ({ id: t.id, nome: t.nome, desc: t.desc })),
+      hists: D.HISTS.map(h => ({ id: h.id, nome: h.nome, desc: h.desc, efeito: hdesc(h) })),
+      cats: D.CATS,
+      habs: Object.values(D.HABS).map(h => ({ id: h.id, nome: h.nome, cat: h.cat, atr: h.atr, tec: h.tec })),
+      extras: D.EXTRAS.map(e => ({ id: e.id, nome: e.nome, custo: e.custo })),
+      pontos: { atr: 6, hab: 8, extra: 8, atrMax: 18, habMax: 5 }
+    };
+  },
+  /* ---------- estado derivado ---------- */
+  estado() {
+    const d = G.cr.d, dia = d.ent ? diaDe(d.ent.data) : G.dia; const r = { continua: !!d.continua };
+    r.periodo = d.per ? D.PERIODOS.indexOf(d.per) : -1; r.entrada = d.per && d.ent ? d.per.entradas.indexOf(d.ent) : -1;
+    r.entradaNome = d.ent ? d.ent.nome : null; r.entradaData = d.ent ? dataStr(diaDe(d.ent.data)) : null; r.entradaLocal = d.ent ? D.REGIOES[d.ent.regiao].nome : null; r.entradaDesc = d.ent ? d.ent.desc : null;
+    r.pais = d.pais || null; r.cond = d.cond || null; r.condLabel = d.condLabel || null; r.nac2 = d.nac2 || null;
+    r.condicoes = d.pais ? [{ id: 'cidadao', nome: 'Cidadão de ' + D.NACOES[d.pais].nome, desc: 'Cidadania plena, documentos regulares.' }]
+      .concat(ocupado(d.pais, dia) ? [{ id: 'ocupado', nome: 'Cidadão de território ocupado', desc: 'Seu país está sob ocupação; os documentos existem, mas são vigiados.' }] : [])
+      .concat([{ id: 'apatrida', nome: 'Apátrida', desc: 'Nenhum Estado o reconhece; documentos precários. Poucas organizações o aceitam.' }, { id: 'refugiado', nome: 'Refugiado', desc: 'Fugiu de casa; papéis frágeis e poucas portas abertas.' }, { id: 'dupla', nome: 'Dupla nacionalidade', desc: 'Dois passaportes, duas lealdades possíveis.' }]) : [];
+    r.ocupados = D.NAC_ORDEM.filter(k => ocupado(k, dia));
+    r.classe = d.classe || null; r.classe2 = d.classe2 || null;
+    r.nome = d.nome || ''; r.idade = d.idade || 26; r.sexo = d.sexo || null; r.tracos = (d.tracos || []).slice(); r.aparencia = d.aparencia || ''; r.hist = d.hist || null; r.histTxt = d.histTxt || '';
+    r.atrPts = d.atrPts; r.habPts = d.habPts; r.extras = d.extras.slice(); r.extraPts = 8 - d.extras.reduce((s, id) => s + D.EXTRAS.find(e => e.id === id).custo, 0);
+    if (d.classe) {
+      const b = atrBase(), f = atrFinal(); r.atr = {}; for (const k in b) r.atr[k] = { base: b[k], add: d.atrAdd[k] || 0, final: f[k], mod: modAttr(f[k]) };
+      const hb = habsBase(), hf = habsFinal(); r.hab = {}; Object.values(D.HABS).forEach(h => { r.hab[h.id] = { base: hb[h.id] || 0, add: d.habAdd[h.id] || 0, final: hf[h.id] || 0 }; });
+      const c = D.CLASSES[d.classe]; r.kit = c.kit.map(k => k.startsWith('@') || k.startsWith('mun@') ? k.replace(/^mun@/, 'munição ').replace(/^@/, '').replace(/:\d+/, '') : nomeItem(k.split(':')[0]));
+    }
+    r.org = d.org || null;
+    r.orgs = d.pais && d.cond && d.classe && d.ent ? listaOrgs().map(o => ({ id: o.id, nome: o.nome, tipo: o.tipo, desc: o.desc, obj: o.obj, crim: ORGS_CRIMINOSAS.includes(o.id) })) : [];
+    if (d.org && !r.orgs.some(o => o.id === d.org)) { d.org = null; r.org = null; }
+    r.erros = {}; for (const p of this.passos()) { const e = this.validar(p.id); if (e) r.erros[p.id] = e; }
+    return r;
+  },
+  /* null se o passo está completo; senão a mensagem do que falta */
+  validar(id) {
+    const d = G.cr.d;
+    if (id === 'mundo') return d.ent ? null : 'Escolha um período e um ponto de entrada.';
+    if (id === 'origem') return !d.pais ? 'Escolha o país de origem.' : !d.cond ? 'Escolha sua situação de nacionalidade.' : d.cond === 'dupla' && !d.nac2 ? 'Escolha o segundo país.' : null;
+    if (id === 'vocacao') return d.classe ? (d.classe2 === d.classe ? 'As duas classes precisam ser diferentes.' : null) : 'Escolha uma classe.';
+    if (id === 'pessoa') return !d.nome || d.nome.length < 2 ? 'Dê um nome ao personagem.' : !d.sexo ? 'Escolha o sexo/gênero.' : (d.tracos || []).length !== 2 ? 'Escolha exatamente dois traços.' : null;
+    if (id === 'talentos') return null;
+    if (id === 'alistamento') return d.org ? null : 'Escolha uma organização.';
+    if (id === 'ficha') { for (const p of this.passos()) if (p.id !== 'ficha') { const e = this.validar(p.id); if (e) return e; } return null; }
+    return null;
+  },
+  /* ---------- ações ---------- */
+  _resetDepend(nivel) { const d = G.cr.d; d.org = null; d.orgLista = null; if (nivel === 'classe') { d.atrAdd = {}; d.atrPts = 6; d.habAdd = {}; d.habPts = 8; } },
+  entrada(pi, ei) { const d = G.cr.d, p = D.PERIODOS[pi]; if (!p || !p.entradas[ei]) return; d.per = p; d.ent = p.entradas[ei]; if (d.cond === 'ocupado' && !ocupado(d.pais, diaDe(d.ent.data))) { d.cond = null; d.condLabel = null; } this._resetDepend(); },
+  pais(k) { const d = G.cr.d; if (!D.NACOES[k]) return; d.pais = k; d.nac = k; d.cond = null; d.condLabel = null; d.nac2 = null; this._resetDepend(); },
+  cond(id, nac2) {
+    const d = G.cr.d; const op = this.estado().condicoes.find(c => c.id === id); if (!op) return; d.cond = id; d.condLabel = { cidadao: 'cidadão', ocupado: 'cidadão de território ocupado', apatrida: 'apátrida', refugiado: 'refugiado', dupla: 'dupla nacionalidade' }[id];
+    if (id === 'dupla') { d.nac2 = nac2 && nac2 !== d.pais && D.NACOES[nac2] ? nac2 : null; if (d.nac2) d.condLabel = 'dupla nacionalidade (' + D.NACOES[d.nac2].adj + ')'; } else d.nac2 = null; this._resetDepend();
+  },
+  classe(id, id2) { const d = G.cr.d; if (!D.CLASSES[id]) return; d.classe = id; d.classe2 = id2 && id2 !== id && D.CLASSES[id2] ? id2 : null; this._resetDepend('classe'); },
+  identidade(o) {
+    const d = G.cr.d; if ('nome' in o) d.nome = String(o.nome || '').replace(/[<>]/g, '').slice(0, 60); if ('idade' in o) d.idade = clamp(parseInt(o.idade, 10) || 26, 17, 60); if ('sexo' in o) d.sexo = o.sexo === 'f' ? 'f' : o.sexo === 'm' ? 'm' : null;
+    if ('tracos' in o) d.tracos = [...new Set(o.tracos)].filter(id => D.TRACOS_PJ.some(t => t.id === id)).slice(0, 2); if ('aparencia' in o) d.aparencia = String(o.aparencia || '').replace(/[<>]/g, '').slice(0, 200);
+    if ('hist' in o) d.hist = D.HISTS.some(h => h.id === o.hist) ? o.hist : null; if ('histTxt' in o) d.histTxt = String(o.histTxt || '').replace(/[<>]/g, '').slice(0, 400); d.sexoPre = null;
+  },
+  sortearNome(sexo) { const d = G.cr.d; const s = sexo || d.sexo || (chance(0.8) ? 'm' : 'f'); if (!d.sexo) d.sexo = s; d.nome = gerarNome(d.pais || 'BRA', s); return d.nome; },
+  atr(k, delta) { const d = G.cr.d; if (!d.classe || !(k in D.ATRS)) return; const b = atrBase()[k], atual = d.atrAdd[k] || 0; let novo = Math.max(0, Math.min(atual + delta, 18 - b)); let dl = novo - atual; if (dl > d.atrPts) { dl = d.atrPts; novo = atual + dl; } if (dl === 0) return; d.atrAdd[k] = novo; d.atrPts -= dl; },
+  atrAuto() { const d = G.cr.d; if (!d.classe) return; d.atrAdd = {}; d.atrPts = 6; const b = atrBase(); const ord = Object.keys(b).sort((x, y) => b[y] - b[x]).slice(0, 3); for (const k of ord) { const n = Math.min(2, d.atrPts, 18 - b[k]); d.atrAdd[k] = n; d.atrPts -= n; } },
+  atrZerar() { const d = G.cr.d; d.atrAdd = {}; d.atrPts = 6; },
+  hab(id, delta) { const d = G.cr.d; if (!d.classe || !D.HABS[id]) return; const b = habsBase()[id] || 0, atual = d.habAdd[id] || 0; let novo = Math.max(0, Math.min(atual + delta, 5 - b)); let dl = novo - atual; if (dl > d.habPts) { dl = d.habPts; novo = atual + dl; } if (dl === 0) return; if (novo === 0) delete d.habAdd[id]; else d.habAdd[id] = novo; d.habPts -= dl; },
+  habAuto() { const d = G.cr.d; if (!d.classe) return; d.habAdd = {}; d.habPts = 8; const b = habsBase(); const ord = Object.keys(D.CLASSES[d.classe].hab).sort((x, y) => (b[y] || 0) - (b[x] || 0)); let i = 0, g = 0; while (d.habPts > 0 && g++ < 100) { const k = ord[i % ord.length]; i++; if ((b[k] || 0) + (d.habAdd[k] || 0) >= 5) continue; d.habAdd[k] = (d.habAdd[k] || 0) + 1; d.habPts--; } },
+  habZerar() { const d = G.cr.d; d.habAdd = {}; d.habPts = 8; },
+  org(id) { const d = G.cr.d; if (this.estado().orgs.some(o => o.id === id)) d.org = id; },
+  extra(id) { const d = G.cr.d; const e = D.EXTRAS.find(x => x.id === id); if (!e) return; if (d.extras.includes(id)) { d.extras = d.extras.filter(x => x !== id); return; } const gasto = d.extras.reduce((s, x) => s + D.EXTRAS.find(y => y.id === x).custo, 0); if (gasto + e.custo <= 8) d.extras.push(id); },
+  /* ---------- resumo e ficha completa (constrói o PJ numa cópia descartável) ---------- */
+  resumo() {
+    if (this.validar('ficha')) return null; let r = null;
+    prever(() => { const p = G.pj; r = { hpMax: p.hpMax, din: fmtDin(p.din, p.nac), patente: p.patente, idiomas: Object.keys(p.idiomas).map(c => (D.IDIOMAS && D.IDIOMAS[c] ? D.IDIOMAS[c] : c)), inv: p.inv.length }; });
+    return r;
+  },
+  fichaHtml() {
+    if (this.validar('ficha')) return ''; flush(); let h = '';
+    prever(() => { fichaCompleta(); cmdInventario(); h = flush().map(b => b.h).join(''); });
+    return h;
+  },
+  /* ---------- saídas do assistente ---------- */
+  iniciar() { const e = this.validar('ficha'); if (e) return { erro: e }; G.cr.passo = 'ficha'; G.cr.assist = false; flush(); iniciarCampanha(); return { blocos: flush() }; },
+  /* Troca para o modo digitado, no primeiro passo ainda incompleto */
+  paraTexto() {
+    const cr = G.cr, d = cr.d; cr.assist = false; cr.sub = null;
+    cr.passo = !d.ent && !d.continua ? 'periodo' : !d.pais ? 'pais' : !d.cond || (d.cond === 'dupla' && !d.nac2) ? 'nac' : !d.classe ? 'classe' : (!d.nome || !d.sexo || (d.tracos || []).length !== 2) ? 'nome' : !d.org ? 'org' : 'ficha';
+    if (cr.passo === 'nome') cr.sub = !d.nome ? 'nome' : !d.idade ? 'idade' : !d.sexo ? 'sexo' : 'tracos'; if (cr.passo === 'periodo' && d.per) cr.sub = 'entrada';
+    if (cr.passo === 'nac' && d.cond === 'dupla') cr.sub = 'dupla';
+    if (!d.idade) d.idade = 26;
+    out('sys', 'Modo digitado. Escreva <b>voltar</b> para revisar passos anteriores.'); mostrarPasso(); return flush();
+  }
+};
+
 /* ---- 11_ui.js ---- */
 /* =====================================================================
    11 · Interface (navegador)
@@ -3544,6 +3792,8 @@ function uiRender(blocos) {
 }
 function uiEnviar(txt) {
   txt = (txt || '').trim(); if (!txt) return;
+  if (G && G.fase === 'criacao' && /^\/?assistente$/i.test(txt)) { wzReabrir(); return; }
+  if (G && G.fase === 'morto' && /^\/novo$/i.test(txt)) { const l = $('log'); const u = document.createElement('div'); u.className = 'user'; u.textContent = txt; l.appendChild(u); wzAbrir({ continua: true }); return; }
   const log = $('log'); const u = document.createElement('div'); u.className = 'user'; u.textContent = txt; log.appendChild(u);
   if (UI.hist[UI.hist.length - 1] !== txt) UI.hist.push(txt); UI.hi = UI.hist.length;
   uiRender(processar(txt));
@@ -3578,7 +3828,7 @@ function uiPainel() {
 }
 function uiChips() {
   const c = $('chips2'); let l = [];
-  if (!G || !G.fase || G.fase === 'titulo') l = []; else if (G.fase === 'criacao') l = ['voltar', '/ficha'].concat(G.cr && ['atr', 'habs'].includes(G.cr.passo) ? ['padrão', 'pronto'] : G.cr && G.cr.passo === 'equip' ? ['pronto'] : G.cr && G.cr.passo === 'ficha' ? ['aprovar'] : G.cr && G.cr.passo === 'nome' && G.cr.sub === 'nome' ? ['aleatório'] : G.cr && G.cr.sub === 'aparencia' ? ['pular'] : G.cr && G.cr.passo === 'hist' && G.cr.sub === 'texto' ? ['pular'] : []);
+  if (!G || !G.fase || G.fase === 'titulo') l = []; else if (G.fase === 'criacao') l = ['assistente', 'voltar', '/ficha'].concat(G.cr && ['atr', 'habs'].includes(G.cr.passo) ? ['padrão', 'pronto'] : G.cr && G.cr.passo === 'equip' ? ['pronto'] : G.cr && G.cr.passo === 'ficha' ? ['aprovar'] : G.cr && G.cr.passo === 'nome' && G.cr.sub === 'nome' ? ['aleatório'] : G.cr && G.cr.sub === 'aparencia' ? ['pular'] : G.cr && G.cr.passo === 'hist' && G.cr.sub === 'texto' ? ['pular'] : []);
   else if (G.fase === 'morto') l = ['/novo', '/carregar'];
   else if (G.cena.tipo === 'combate') l = G.cb && G.cb.modo !== 'inf' ? ['Atirar no alvo 1', 'Manobrar para obter vantagem', 'Evadir', 'Usar fumaça', 'Reparar', 'Recuar'] : ['Atirar no inimigo 1', 'Mirar com calma', 'Buscar cobertura', 'Avançar', 'Recuar', 'Recarregar', 'Jogar granada', 'Usar bandagem', 'Negociar rendição', 'Fugir'];
   else if (G.cena.tipo === 'captura') l = ['Resistir em silêncio', 'Mentir sobre quem sou', 'Subornar o guarda', 'Colaborar', 'Tentar fugir', 'Esperar'];
@@ -3596,8 +3846,8 @@ function retomar(msg) {
 function abrirCarregar() { $('msgCarregar').textContent = ''; $('mCarregar').classList.add('on'); }
 function nomeArquivo() { const p = G && G.pj; return 'sombras-da-guerra-' + (p ? norm(p.nome).replace(/\s+/g, '-') + '-' + dtDe(G.dia).toISOString().slice(0, 10) : 'campanha') + '.txt'; }
 function uiInit() {
-  $('bNovo').onclick = () => { $('title').classList.remove('on'); $('log').innerHTML = ''; iniciarCriacao(); uiRender(flush()); $('inp').focus(); };
-  $('bFeb').onclick = () => { $('title').classList.remove('on'); $('log').innerHTML = ''; iniciarCriacao({ sugestao: 'feb' }); uiRender(flush()); $('inp').focus(); };
+  $('bNovo').onclick = () => wzAbrir({});
+  $('bFeb').onclick = () => wzAbrir({ sugestao: 'feb' });
   if (temSave()) { $('bCont').style.display = ''; $('bCont').onclick = () => { if (carregarAuto()) retomar('Campanha retomada do navegador.'); else { apagarSave(); } }; }
   $('bCarr').onclick = () => { $('title').classList.remove('on'); abrirCarregar(); };
   $('bFecharS').onclick = () => $('mSalvar').classList.remove('on');
@@ -3624,6 +3874,156 @@ function uiInit() {
 const CMD_LISTA = [['/ficha', 'ficha completa'], ['/inventario', 'equipamentos'], ['/status', 'situação atual'], ['/missoes', 'missões e ordens'], ['/mapa', 'mapa de situação'], ['/contatos', 'pessoas conhecidas'], ['/organizacao', 'facções'], ['/historico', 'notícias e diário'], ['/rolar', 'rolar dados: /rolar 2d6+3'], ['/evoluir', 'evoluir habilidades'], ['/habilidade', 'habilidade especial'], ['/ideias', 'sugestões'], ['/segredos', 'informações sigilosas'], ['/equipe', 'sua equipe'], ['/salvar', 'exportar campanha'], ['/carregar', 'restaurar campanha'], ['/ajuda', 'ajuda'], ['/novo', 'novo personagem']];
 function uiSug() { const v = $('inp').value, s = $('sug'); if (v[0] !== '/' || v.includes(' ')) { s.style.display = 'none'; return; } const l = CMD_LISTA.filter(c => c[0].startsWith(v.toLowerCase())); if (!l.length) { s.style.display = 'none'; return; } s.innerHTML = l.map(c => `<div data-v="${c[0]}"><b>${c[0]}</b> <span class="dim">— ${c[1]}</span></div>`).join(''); s.style.display = 'block'; UI.sugOn = -1; }
 document.addEventListener('DOMContentLoaded', uiInit);
+
+/* ---- 11b_assistente_ui.js ---- */
+/* =====================================================================
+   11b · Assistente visual de criação de personagem (interface)
+   ===================================================================== */
+const WU = { passo: 'mundo', cat: null, ultimo: null };
+const wzEl = id => document.getElementById(id);
+const WZ_SETA = '▸';
+function wzAbrir(opts) {
+  opts = opts || {}; WIZ.abrir(opts); WU.cat = WIZ.catalogo();
+  WU.passo = opts.sugestao ? 'vocacao' : opts.continua ? 'origem' : 'mundo';
+  wzEl('title').classList.remove('on'); wzEl('log').innerHTML = ''; WU.ultimo = null; wzMostrar();
+}
+function wzReabrir() { G.cr.assist = true; WU.cat = WIZ.catalogo(); const e = WIZ.estado(); WU.passo = WIZ.passos().find(p => e.erros[p.id]) ? WIZ.passos().find(p => e.erros[p.id]).id : 'ficha'; wzMostrar(); }
+function wzMostrar() { wzEl('wiz').classList.add('on'); document.body.classList.add('wz-on'); wzRender(); }
+function wzFechar() { wzEl('wiz').classList.remove('on'); document.body.classList.remove('wz-on'); }
+function wzIdx(id) { return WIZ.passos().findIndex(p => p.id === id); }
+function wzLiberado(st, id) { const ps = WIZ.passos(); const i = ps.findIndex(p => p.id === id); for (let k = 0; k < i; k++) if (st.erros[ps[k].id]) return false; return true; }
+const wzAtrCurto = { FOR: 'FOR', DES: 'DES', CON: 'CON', INT: 'INT', PER: 'PER', CAR: 'CAR', VON: 'VON' };
+function wzPips(base, add, max) { let h = ''; for (let i = 1; i <= max; i++) h += `<i class="${i <= base ? 'b' : i <= base + add ? 'a' : ''}"></i>`; return `<span class="pips">${h}</span>`; }
+function wzBtnQtd(acao, arg, desab, sinal) { return `<button type="button" class="qty" data-w="${acao}" data-a="${arg}" ${desab ? 'disabled' : ''} aria-label="${sinal > 0 ? 'aumentar' : 'diminuir'}">${sinal > 0 ? '+' : '−'}</button>`; }
+/* ---------- renderização ---------- */
+function wzRender() {
+  const main = wzEl('wzMain'); const topo = WU.ultimo === WU.passo ? main.scrollTop : 0; WU.ultimo = WU.passo;
+  const st = WIZ.estado(), cat = WU.cat, ps = WIZ.passos(); const i = wzIdx(WU.passo);
+  wzEl('wzTabs').innerHTML = ps.map((p, k) => { const lib = wzLiberado(st, p.id); return `<button type="button" class="wz-tab ${p.id === WU.passo ? 'on' : ''} ${k < i && lib && !st.erros[p.id] ? 'ok' : ''}" data-w="go" data-a="${p.id}" ${lib ? '' : 'disabled'}><b>${k + 1}</b><span>${esc(p.nome)}</span></button>`; }).join('');
+  const P = ps[i]; wzEl('wzTitulo').innerHTML = `<span class="dim">Passo ${i + 1} de ${ps.length}</span> · <b>${esc(P.nome)}</b> <span class="dim">— ${esc(P.sub)}</span>`;
+  let h = ''; try { h = ({ mundo: wzMundo, origem: wzOrigem, vocacao: wzVocacao, pessoa: wzPessoa, talentos: wzTalentos, alistamento: wzAlistamento, ficha: wzFicha })[WU.passo](st, cat); } catch (e) { h = '<p class="alert">Erro ao montar esta tela: ' + esc(e.message) + '</p>'; }
+  main.innerHTML = h; main.scrollTop = topo; wzLateral(st);
+}
+function wzLateral(st) {
+  st = st || WIZ.estado(); const ps = WIZ.passos(), i = wzIdx(WU.passo), cat = WU.cat, d = G.cr.d; const erro = st.erros[WU.passo];
+  const L = []; const lin = (k, v) => L.push(`<div class="wz-l"><span>${k}</span><b>${v || '<i class="dim">—</i>'}</b></div>`);
+  if (!st.continua) lin('Período', st.periodo >= 0 ? esc(cat.periodos[st.periodo].nome) : ''); lin(st.continua ? 'Local' : 'Início', st.entradaNome ? esc(st.entradaNome) + `<br><span class="dim">${esc(st.entradaData)} · ${esc(st.entradaLocal)}</span>` : '');
+  lin('Origem', st.pais ? esc(D.NACOES[st.pais].nome) + (st.condLabel ? `<br><span class="dim">${esc(st.condLabel)}</span>` : '') : '');
+  lin('Classe', st.classe ? esc(D.CLASSES[st.classe].nome) + (st.classe2 ? ' / ' + esc(D.CLASSES[st.classe2].nome) : '') : '');
+  lin('Personagem', st.nome ? esc(st.nome) + `<br><span class="dim">${st.idade} anos${st.sexo ? ' · ' + (st.sexo === 'f' ? 'F' : 'M') : ''}${st.tracos.length ? ' · ' + st.tracos.map(t => esc(cat.tracos.find(x => x.id === t).nome)).join(', ') : ''}</span>` : '');
+  if (st.atr) lin('Atributos', `<span class="wz-atrs">${Object.entries(st.atr).map(([k, v]) => `<span class="${v.add ? 'up' : ''}">${k} <b>${v.final}</b></span>`).join('')}</span>`);
+  lin('Organização', st.org ? esc(D.ORGS[st.org].nome) : '');
+  wzEl('wzResumo').innerHTML = `<h5>Ficha em construção</h5>${L.join('')}`;
+  wzEl('wzAviso').innerHTML = erro ? `<span class="alert">${esc(erro)}</span>` : WU.passo === 'talentos' && (st.atrPts || st.habPts) ? `<span class="dim">Sobram ${st.atrPts} pt de atributo e ${st.habPts} de habilidade — pode seguir sem gastar.</span>` : '';
+  const ult = i === ps.length - 1; const b = wzEl('wzProx'); b.textContent = ult ? 'Iniciar campanha ▶' : 'Continuar ▶'; b.disabled = !!erro; b.dataset.w = ult ? 'iniciar' : 'prox'; wzEl('wzAnt').disabled = i === 0;
+}
+function wzCard(acao, arg, sel, titulo, corpo, extra) { return `<button type="button" class="wz-card ${sel ? 'on' : ''}" data-w="${acao}" data-a="${esc(arg)}" ${extra || ''}><b>${titulo}</b>${corpo ? `<span>${corpo}</span>` : ''}</button>`; }
+/* ---------- 1 · Mundo ---------- */
+function wzMundo(st, cat) {
+  let h = `<p class="wz-lead">Escolha o <b>momento da guerra</b> em que sua história começa. Ele define o cenário, as organizações ativas e o que já aconteceu no mundo.</p><div class="wz-grid">`;
+  h += cat.periodos.map((p, i) => wzCard('per', i, st.periodo === i, esc(p.nome), esc(p.resumo))).join('') + '</div>';
+  if (st.periodo >= 0) { const p = cat.periodos[st.periodo]; h += `<h4 class="wz-h" id="wzEntradas">Ponto de entrada em “${esc(p.nome)}”</h4><div class="wz-grid wz-1">${p.entradas.map((e, j) => wzCard('ent', st.periodo + ':' + j, st.entrada === j, esc(e.nome), `<em>${esc(e.data)} · ${esc(e.local)}</em><br>${esc(e.desc)}`)).join('')}</div>`; }
+  return h;
+}
+/* ---------- 2 · Origem ---------- */
+function wzOrigem(st, cat) {
+  let h = `<p class="wz-lead">Em que país você nasceu — ou de onde vem? Isso define idioma, nomes, contatos e as primeiras lealdades.</p><input type="search" id="wzBusca" class="wz-in" placeholder="Filtrar países…" autocomplete="off"><div class="wz-grid wz-sm" id="wzPaises">`;
+  h += cat.nacoes.map(n => wzCard('pais', n.id, st.pais === n.id, esc(n.nome), st.ocupados.includes(n.id) ? '<em>ocupado nesta data</em>' : '', `data-n="${esc(n.nome.toLowerCase())}"`)).join('') + '</div>';
+  if (st.pais) {
+    h += `<div class="wz-nota"><b>${esc(D.NACOES[st.pais].nome)}</b> — ${esc(D.NACOES[st.pais].desc)}</div><h4 class="wz-h">Sua situação</h4><div class="wz-grid wz-1">${st.condicoes.map(c => wzCard('cond', c.id, st.cond === c.id, esc(c.nome), esc(c.desc))).join('')}</div>`;
+    if (st.cond === 'dupla') h += `<p class="wz-row"><label for="wzNac2">Segunda nacionalidade:</label> <select id="wzNac2" class="wz-in"><option value="">— escolha —</option>${cat.nacoes.filter(n => n.id !== st.pais).map(n => `<option value="${n.id}" ${st.nac2 === n.id ? 'selected' : ''}>${esc(n.nome)}</option>`).join('')}</select></p>`;
+  }
+  return h;
+}
+/* ---------- 3 · Vocação ---------- */
+function wzVocacao(st, cat) {
+  let h = `<p class="wz-lead">Qual é a sua <b>classe</b>? Cada uma tem atributos, habilidades, equipamento, vantagens, desvantagens e caminhos de evolução próprios.</p><div class="wz-split"><div class="wz-grid">`;
+  h += cat.classes.map(c => wzCard('cls', c.id, st.classe === c.id, esc(c.nome), esc(c.desc))).join('') + '</div><div>';
+  if (st.classe) {
+    const c = cat.classes.find(x => x.id === st.classe);
+    h += `<div class="wz-det"><h3>${esc(c.nome)}</h3><h5>Atributos base</h5><div class="wz-atrs big">${cat.atrs.map(a => `<span>${a.id} <b>${c.atr[a.id]}</b></span>`).join('')}</div><h5>Habilidades iniciais</h5><p class="wz-tags">${c.habs.map(([n, v]) => `<span>${esc(n)} ${v}</span>`).join('')}</p><h5>Vantagens</h5><ul>${c.vant.map(x => `<li>${esc(x)}</li>`).join('')}</ul><h5>Desvantagens</h5><ul>${c.desv.map(x => `<li>${esc(x)}</li>`).join('')}</ul><h5>Habilidades especiais</h5><p class="small">${esc(c.excl)}</p><h5>Caminhos de evolução</h5><p class="small">${c.evol.map(esc).join(' · ')}</p>`;
+    h += `<h5>Classe híbrida (opcional)</h5><select id="wzClasse2" class="wz-in"><option value="">Nenhuma — só ${esc(c.nome)}</option>${cat.classes.filter(x => x.id !== st.classe).map(x => `<option value="${x.id}" ${st.classe2 === x.id ? 'selected' : ''}>+ ${esc(x.nome)}</option>`).join('')}</select><p class="dim small">Atributos médios das duas classes, habilidades da segunda pela metade e bônus de classe da segunda reduzido.</p></div>`;
+  } else h += '<div class="wz-nota dim">Escolha uma classe para ver os detalhes.</div>';
+  return h + '</div></div>';
+}
+/* ---------- 4 · Pessoa ---------- */
+function wzPessoa(st, cat) {
+  let h = `<div class="wz-form"><div class="wz-f"><label for="wzNome">Nome</label><div class="wz-inl"><input id="wzNome" class="wz-in" maxlength="60" value="${esc(st.nome)}" placeholder="Nome do personagem" autocomplete="off"><button type="button" class="wz-sec" data-w="sorteio" title="Sortear um nome compatível com o país">🎲 Sortear</button></div></div>`;
+  h += `<div class="wz-f"><label>Sexo / gênero</label><div class="wz-seg"><button type="button" class="${st.sexo === 'm' ? 'on' : ''}" data-w="sexo" data-a="m">Masculino</button><button type="button" class="${st.sexo === 'f' ? 'on' : ''}" data-w="sexo" data-a="f">Feminino</button></div></div>`;
+  h += `<div class="wz-f"><label for="wzIdade">Idade: <b id="wzIdadeV">${st.idade}</b></label><input type="range" id="wzIdade" min="17" max="60" value="${st.idade}"></div></div>`;
+  h += `<h4 class="wz-h">Dois traços pessoais <span class="dim">(${st.tracos.length}/2)</span></h4><div class="wz-grid wz-sm">${cat.tracos.map(t => wzCard('trc', t.id, st.tracos.includes(t.id), esc(t.nome), esc(t.desc))).join('')}</div>`;
+  h += `<h4 class="wz-h">Passado <span class="dim">(opcional — dá bônus em habilidades, idiomas, contatos e recursos)</span></h4><div class="wz-grid">${cat.hists.map(x => wzCard('hist', x.id, st.hist === x.id, esc(x.nome), esc(x.desc) + (x.efeito ? `<br><em>${esc(x.efeito)}</em>` : ''))).join('')}</div>`;
+  h += `<div class="wz-form"><div class="wz-f"><label for="wzHistTxt">Detalhes da sua história <span class="dim">(opcional)</span></label><textarea id="wzHistTxt" class="wz-in" rows="2" maxlength="400" placeholder="Família, de onde vem, o que perdeu, o que quer…">${esc(st.histTxt)}</textarea></div><div class="wz-f"><label for="wzApar">Aparência <span class="dim">(opcional)</span></label><input id="wzApar" class="wz-in" maxlength="200" value="${esc(st.aparencia)}" placeholder="Uma frase"></div></div>`;
+  return h;
+}
+/* ---------- 5 · Talentos ---------- */
+function wzTalentos(st, cat) {
+  const c = cat.pontos; let h = `<p class="wz-lead">Os valores da classe já estão aplicados. Distribua seus pontos livres — <b>nada é definitivo</b>: o personagem evolui com o uso.</p><div class="wz-two"><section><div class="wz-hd"><h4 class="wz-h">Atributos</h4><span class="wz-pts ${st.atrPts ? '' : 'z'}">${st.atrPts} pt</span><button type="button" class="wz-sec" data-w="atrAuto">Sugestão</button><button type="button" class="wz-sec" data-w="atrZerar">Zerar</button></div>`;
+  h += cat.atrs.map(a => { const v = st.atr[a.id]; return `<div class="wz-r"><span class="n">${esc(a.nome)}</span><span class="bar"><i style="width:${v.final / 20 * 100}%"></i></span><span class="v"><b>${v.final}</b> <em>(${sinal(v.mod)})</em></span>${wzBtnQtd('atr', a.id + ':-1', v.add <= 0, -1)}${wzBtnQtd('atr', a.id + ':1', st.atrPts <= 0 || v.final >= c.atrMax, 1)}</div>`; }).join('');
+  h += `<p class="dim small">Máximo ${c.atrMax} por atributo na criação. Modificador = (valor − 10) ÷ 2.</p></section><section><div class="wz-hd"><h4 class="wz-h">Habilidades</h4><span class="wz-pts ${st.habPts ? '' : 'z'}">${st.habPts} pt</span><button type="button" class="wz-sec" data-w="habAuto">Sugestão</button><button type="button" class="wz-sec" data-w="habZerar">Zerar</button></div>`;
+  for (const k in cat.cats) { const l = cat.habs.filter(x => x.cat === k); const rel = l.filter(x => st.hab[x.id].final > 0 || st.hab[x.id].add > 0), resto = l.filter(x => !rel.includes(x)); const linha = x => { const v = st.hab[x.id]; return `<div class="wz-r s"><span class="n">${esc(x.nome)}${x.tec && !v.final ? '<sup title="Habilidade técnica: sem treino sofre −3">*</sup>' : ''}</span>${wzPips(v.base, v.add, c.habMax)}<span class="v"><b>${v.final}</b></span>${wzBtnQtd('hab', x.id + ':-1', v.add <= 0, -1)}${wzBtnQtd('hab', x.id + ':1', st.habPts <= 0 || v.final >= c.habMax, 1)}</div>`; }; h += `<details class="wz-cat" ${rel.length ? 'open' : ''}><summary>${esc(cat.cats[k])} <span class="dim">(${rel.length}/${l.length} treinadas)</span></summary>${rel.concat(resto).map(linha).join('')}</details>`; }
+  h += `<p class="dim small">● da classe · ● comprada agora · máx. ${c.habMax} por habilidade. * técnica sem treino: −3 nos testes.</p></section></div>`;
+  return h;
+}
+/* ---------- 6 · Alistamento ---------- */
+function wzAlistamento(st) {
+  let h = `<p class="wz-lead">A qual <b>organização</b> você pertence? Só aparecem as compatíveis com sua nacionalidade, classe, local e data.</p>`;
+  if (!st.orgs.length) h += '<p class="alert">Nenhuma organização compatível: volte e mude país, situação ou classe.</p>';
+  h += `<div class="wz-grid wz-1">${st.orgs.map(o => wzCard('org', o.id, st.org === o.id, `${esc(o.nome)} <small class="dim">(${esc(o.tipo)})</small>`, `${esc(o.desc)}<br><em>Objetivo: ${esc(o.obj)}</em>${o.crim ? '<br><span class="alert">⚠ Aviso histórico: esta organização cometeu crimes de guerra e atrocidades. A campanha não a glorifica: haverá escolhas morais e consequências.</span>' : ''}`)).join('')}</div>`;
+  h += `<h4 class="wz-h">Equipamento <span class="wz-pts ${st.extraPts ? '' : 'z'}">${st.extraPts} pt</span></h4><p><b>Kit da classe</b> (automático): ${st.kit.map(esc).join(', ')}.</p><div class="wz-grid wz-sm">${WU.cat.extras.map(e => { const on = st.extras.includes(e.id), semPts = !on && e.custo > st.extraPts; return wzCard('ext', e.id, on, esc(e.nome), `custo ${e.custo}`, semPts ? 'disabled' : ''); }).join('')}</div>`;
+  return h;
+}
+/* ---------- 7 · Ficha ---------- */
+function wzFicha(st) {
+  const r = WIZ.resumo(); if (!r) return '<p class="alert">Ainda faltam informações — volte aos passos marcados.</p>';
+  let h = `<p class="wz-lead">Esta é a ficha de <b>${esc(st.nome)}</b>. Se algo não agradar, volte ao passo (os botões abaixo levam direto). Quando estiver pronto, <b>inicie a campanha</b>.</p><div class="wz-sum"><div><span>Pontos de vida</span><b>${r.hpMax}</b></div><div><span>Dinheiro</span><b>${esc(r.din)}</b></div><div><span>Posto</span><b>${esc(r.patente)}</b></div><div><span>Idiomas</span><b>${r.idiomas.length}</b></div></div>`;
+  h += `<p class="wz-edit">${WIZ.passos().filter(p => p.id !== 'ficha').map(p => `<button type="button" class="wz-sec" data-w="go" data-a="${p.id}">✎ ${esc(p.nome)}</button>`).join('')}</p><div class="wz-ficha">${WIZ.fichaHtml()}</div>`;
+  return h;
+}
+/* ---------- eventos ---------- */
+function wzAcao(a, arg) {
+  const [x, y] = String(arg || '').split(':');
+  switch (a) {
+    case 'per': WIZ.entrada(+x, 0); wzRender(); { const e = wzEl('wzEntradas'); if (e) e.scrollIntoView({ block: 'start' }); } return;
+    case 'ent': WIZ.entrada(+x, +y); break;
+    case 'pais': WIZ.pais(arg); break;
+    case 'cond': WIZ.cond(arg, G.cr.d.nac2); break;
+    case 'cls': WIZ.classe(arg, G.cr.d.classe2 && G.cr.d.classe2 !== arg ? G.cr.d.classe2 : null); break;
+    case 'trc': { const t = G.cr.d.tracos.slice(); const i = t.indexOf(arg); if (i >= 0) t.splice(i, 1); else if (t.length < 2) t.push(arg); else { t.shift(); t.push(arg); } WIZ.identidade({ tracos: t }); break; }
+    case 'hist': WIZ.identidade({ hist: G.cr.d.hist === arg ? null : arg }); break;
+    case 'sexo': WIZ.identidade({ sexo: arg }); break;
+    case 'sorteio': WIZ.sortearNome(G.cr.d.sexo); break;
+    case 'atr': WIZ.atr(x, +y); break; case 'atrAuto': WIZ.atrAuto(); break; case 'atrZerar': WIZ.atrZerar(); break;
+    case 'hab': WIZ.hab(x, +y); break; case 'habAuto': WIZ.habAuto(); break; case 'habZerar': WIZ.habZerar(); break;
+    case 'org': WIZ.org(arg); break; case 'ext': WIZ.extra(arg); break;
+    case 'go': { const st = WIZ.estado(); if (wzLiberado(st, arg)) WU.passo = arg; break; }
+    case 'prox': { const ps = WIZ.passos(), i = wzIdx(WU.passo); if (!WIZ.validar(WU.passo) && i < ps.length - 1) WU.passo = ps[i + 1].id; break; }
+    case 'ant': { const ps = WIZ.passos(), i = wzIdx(WU.passo); if (i > 0) WU.passo = ps[i - 1].id; break; }
+    case 'iniciar': { const r = WIZ.iniciar(); if (r.erro) { wzEl('wzAviso').innerHTML = `<span class="alert">${esc(r.erro)}</span>`; return; } wzFechar(); wzEl('log').innerHTML = ''; uiRender(r.blocos); wzEl('inp').focus(); return; }
+    case 'texto': { wzFechar(); wzEl('log').innerHTML = ''; uiRender(WIZ.paraTexto()); wzEl('inp').focus(); return; }
+    case 'cancelar': { wzFechar(); G = novoEstado(); G.fase = 'titulo'; wzEl('log').innerHTML = ''; wzEl('title').classList.add('on'); uiPainel(); return; }
+    default: return;
+  }
+  wzRender();
+}
+function wzInit() {
+  const w = wzEl('wiz');
+  w.addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (!b || b.disabled) return; wzAcao(b.dataset.w, b.dataset.a); });
+  w.addEventListener('input', e => {
+    const t = e.target;
+    if (t.id === 'wzNome') { WIZ.identidade({ nome: t.value }); wzLateral(); }
+    else if (t.id === 'wzIdade') { WIZ.identidade({ idade: t.value }); wzEl('wzIdadeV').textContent = t.value; wzLateral(); }
+    else if (t.id === 'wzApar') WIZ.identidade({ aparencia: t.value });
+    else if (t.id === 'wzHistTxt') WIZ.identidade({ histTxt: t.value });
+    else if (t.id === 'wzBusca') { const q = norm(t.value).trim(); document.querySelectorAll('#wzPaises .wz-card').forEach(c => { c.style.display = !q || norm(c.dataset.n).includes(q) ? '' : 'none'; }); }
+  });
+  w.addEventListener('change', e => {
+    const t = e.target;
+    if (t.id === 'wzNac2') { WIZ.cond('dupla', t.value); wzRender(); }
+    else if (t.id === 'wzClasse2') { WIZ.classe(G.cr.d.classe, t.value || null); wzRender(); }
+  });
+}
+document.addEventListener('DOMContentLoaded', wzInit);
 
 </script>
 </body>
