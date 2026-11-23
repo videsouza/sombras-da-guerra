@@ -13,8 +13,9 @@ Também funciona abrindo `index.html` direto no navegador (duplo clique).
 
 ## Como jogar
 
-- **Escreva o que o personagem faz com suas próprias palavras** ("me aproximo da janela e escuto a conversa"). Botões e sugestões são apenas atalhos.
-- A criação de personagem é guiada, um passo por vez: período, país, nacionalidade (inclui apátrida, refugiado, território ocupado), classe (14 + híbridos), nome e traços, atributos, especializações, história, organização, equipamento — depois a ficha para aprovação.
+- **Ações por menu:** em cada momento (mundo, missão, combate, cativeiro) o jogo mostra as ações possíveis, agrupadas, com submenus para viajar, falar com alguém, comprar/vender e usar itens. Atalhos de teclado: **1–9** escolhem as primeiras opções; **Esc** volta de um submenu.
+- **Ação livre (opcional):** o botão **✍ Ação livre** mostra o campo de texto para escrever qualquer ação com suas próprias palavras ("me aproximo da janela e escuto a conversa"). A escolha fica lembrada no navegador.
+- A criação de personagem usa um **assistente visual em 7 telas** (Mundo → Origem → Vocação → Pessoa → Talentos → Alistamento → Ficha), com cartões clicáveis, botões +/− para atributos e habilidades, resumo ao vivo e ficha final para aprovação. Quem preferir pode alternar a qualquer momento para o **modo digitado** (botão "Responder digitando"; para voltar ao assistente, digite `assistente`).
 - Botão **Campanha sugerida** na tela inicial: Itália, 1944, soldado brasileiro da FEB.
 - Sistema d20 com todas as rolagens mostradas (AÇÃO / Dado / Atributo / Habilidade / Resultado / Dificuldade / RESULTADO).
 
