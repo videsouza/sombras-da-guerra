@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>2ª Guerra Mundial — Sombras da Guerra · RPG de texto</title>
+<title>Segunda Guerra Mundial — Sombras da Guerra · RPG de texto</title>
 <meta name="description" content="RPG de texto interativo ambientado na Segunda Guerra Mundial: crie seu personagem, escolha suas ações e viva (ou altere) a história. Roda no navegador, sem instalação.">
 <meta name="theme-color" content="#12100c">
 <style>
@@ -2742,7 +2742,7 @@ D.TWISTS = {
 function gerarOfertas() {
   const p = G.pj, o = D.ORGS[p.orgId], rel = relRegiao(G.local.regiao); const lista = [];
   const cand = D.MT_LISTA.filter(id => { const t = D.MT[id]; if (!t.tipos.includes(o.tipo)) return false; if (id === 'patrulha' && o.tipo === 'resistencia' && chance(0.5)) return false; return true; });
-  const ped = cand.map(id => { const t = D.MT[id]; let w = 2; if (t.cls.includes(p.classe)) w += 3; if (p.classe2 && t.cls.includes(p.classe2)) w += 1; if (t.bel && ['urbano'].includes(reg().terreno)) w -= 0; if (id === 'batalha' && !(['U', 'P', 'O', 'M', 'F', 'H', 'B', 'N'].includes(reg().macro) && G.dia > diaDe('1939-09-01'))) w = 0; if (id === 'batalha' && rel === 'amigo' && ['Z', 'X'].includes(reg().macro)) w = 0; if (id === 'comboio' && reg().amb === 'cidade') w -= 1; return [id, Math.max(0, w)]; });
+  const ped = cand.map(id => { const t = D.MT[id]; let w = 1; if (t.cls.includes(p.classe)) w += 5; if (p.classe2 && t.cls.includes(p.classe2)) w += 1; if (t.bel && ['urbano'].includes(reg().terreno)) w -= 0; if (id === 'batalha' && !(['U', 'P', 'O', 'M', 'F', 'H', 'B', 'N'].includes(reg().macro) && G.dia > diaDe('1939-09-01'))) w = 0; if (id === 'batalha' && rel === 'amigo' && ['Z', 'X'].includes(reg().macro)) w = 0; if (id === 'comboio' && reg().amb === 'cidade') w -= 1; return [id, Math.max(0, w)]; });
   const usados = new Set(); const n = ri(2, 4);
   for (let i = 0; i < n; i++) { const pool = ped.filter(x => !usados.has(x[0]) && x[1] > 0); if (!pool.length) break; const id = pesado(pool); usados.add(id); lista.push(montarOferta(id)); }
   G.ofertas = lista; return lista;
@@ -2776,7 +2776,7 @@ function ctxMissao(m) { const ng = npc(m.ng); return { alvo: m.alvo, inim: 'o in
 function iniciarMissao(of) {
   const t = D.MT[of.tpl]; const m = G.missao = { id: of.id, tpl: of.tpl, titulo: of.titulo, alvo: of.alvo, ng: of.ng, inim: of.inim, inimChave: of.inimChave, regiao: of.regiao, dcAdj: of.dcAdj, prazo: of.prazo, xp: of.xp, din: of.din, est: 0, m: 0, a: 0, amax: 3, alarmes: 0, ini: G.dia, rev: {}, hist: [], dilema: false, vantagem: false, passos: 0, estagiosOk: 0, civ: 0, twist: false };
   G.cena = { tipo: 'missao' }; conhecerRegiao(m.regiao, 2);
-  cartao('🎯 ' + of.titulo, `<p>${fmt(tpl(t.intro, ctxMissao(m)))}</p><p class="dim">Prazo: ${dataStr(of.prazo, true)} · Recompensa estimada: ${of.xp} XP e ${fmtDin(of.din)}.</p><p class="dim">Escolha no menu como abordar cada etapa — ou ative <b>✍ Ação livre</b> para descrever a ação com suas palavras. Para desistir: <b>Abandonar a missão</b>.</p>`, 'missao');
+  cartao('🎯 ' + of.titulo, `<p>${fmt(tpl(t.intro, ctxMissao(m)))}</p><p class="dim">Prazo: ${dataStr(of.prazo, true)} · Recompensa estimada: ${of.xp} XP e ${fmtDin(of.din)}.</p><p class="dim">Em cada etapa, escolha entre ações concretas no menu — ou ative <b>✍ Ação livre</b> para descrever a ação com suas palavras. Para desistir: <b>Abandonar a missão</b>.</p>`, 'missao');
   const ng = npc(m.ng); npcMem(ng, 'Passou-me uma missão', 0); mostrarEstagio();
 }
 function estAtual() { const m = G.missao; return D.MT[m.tpl].est[m.est]; }
@@ -2808,7 +2808,7 @@ function escolherHab(tag, txt, forcada) {
   if (tag === 'investigar') { if (/(contraespion|vigilanc|me seguem)/.test(t)) return 'contraespionagem'; if (/(reconhec|terreno|posic)/.test(t)) return 'reconhecimento'; return 'investigacao'; }
   return L.slice().sort((a, b) => hl(b) - hl(a))[0];
 }
-function agirMissao(txt, tagF, habF) {
+function agirMissao(txt, tagF, habF, opt, optI) {
   const m = G.missao; if (!m) return; const t = D.MT[m.tpl], e = estAtual(); const n = norm(txt);
   if (m.dilema) { if (/(ajud|salv|proteg|levo|cuido|fico|espero por|auxilio)/.test(n)) { m.dilema = false; m.civ++; passarTempo(90, { esforco: 2 }); m.a = Math.min(m.amax, m.a + 1); out('narr', 'Você escolhe ajudar. Perde tempo e se expõe mais, mas olha para si mesmo sem desprezo.'); ganharMental(2); ganharXP(10, 'Liderança', 'escolha moral difícil'); out('sys', barraMissao()); if (m.a >= m.amax) return dispararAlarme(); return; } if (/(sigo|ignor|deixo|abandon|sem eles|vou em frente|prossigo|avanc)/.test(n)) { m.dilema = false; perderMental(4, 'abandonar quem pedia ajuda'); out('narr', 'Você segue. A decisão é prática, e o gosto que ela deixa não é.'); } }
   const tag = tagF || tagDeTexto(txt); const info = D.TAGS[tag];
@@ -2822,13 +2822,15 @@ function agirMissao(txt, tagF, habF) {
   if (tag === 'social' || tag === 'engano') { const idi = D.REGIOES[m.regiao].idioma; const bi = bonusIdioma(idi); if (bi[0]) bonus.push(bi); const dc_ = melhorDoc(); if (tag === 'engano' && dc_ && dc_.falso) bonus.push([Math.floor(dc_.qual / 3) - 1, 'documentos falsos']); }
   if (tag === 'furtivo' && ehNoite(G.min)) bonus.push([2, 'noite']);
   if (tag === 'forca') { const w = armaAtiva(); if (!w && hab !== 'corpo_a_corpo') bonus.push([-3, 'sem arma']); }
-  const r = teste({ hab, atr: hab ? D.HABS[hab].atr : 'INT', dc, acao: `${cap(info.nome)}: ${txt.length > 70 ? txt.slice(0, 67) + '…' : txt}`, bonus });
+  const r = teste({ hab, atr: hab ? D.HABS[hab].atr : 'INT', dc, acao: opt ? opt[1] : `${cap(info.nome)}: ${txt.length > 70 ? txt.slice(0, 67) + '…' : txt}`, bonus });
   m.passos++; passarTempo(ri(25, 100), { esforco: tag === 'forca' || tag === 'fuga' ? 3 : 1.5 }); if (G.cena.tipo === 'morto') return;
   const b = D.TX[tag]; const c = ctxMissao(m); const k = r.fc ? 'ko2' : r.ok ? 'ok' : r.parcial ? 'par' : 'ko';
   let delta = 0, al = 0;
   if (r.crit) { delta = 3; al = -1; } else if (r.ok) { delta = 2; } else if (r.parcial) { delta = 1; al = 1; } else if (r.fc) { al = 2; } else { al = 1; }
   if (tag === 'forca' && !t.bel && delta > 0) al += 1; if (tag === 'fuga') { delta = Math.min(delta, 1); }
-  out('narr', fmt(tpl(pick(b[k]), c)) + (r.crit ? ' <i>(excepcional)</i>' : ''));
+  if (opt && (k === 'ok' || k === 'par')) { m.feitas = m.feitas || {}; m.feitas[m.est + ':' + optI] = 1; }
+  const tx = opt ? (k === 'ok' ? opt[2] : k === 'par' ? opt[2] + ' ' + pick(D.PARC) : k === 'ko' ? opt[3] : opt[3] + ' ' + pick(D.KO2X)) : pick(b[k]);
+  out('narr', fmt(tpl(tx, c)) + (r.crit ? ' <i>(excepcional)</i>' : ''));
   if (tag === 'investigar' && r.ok && e.det && !m.rev[e.det[0]]) { m.rev[e.det[0]] = true; out('sys', `🔎 <b>Você descobriu algo útil:</b> ${fmt(tpl(e.det[1], c))} <span class="dim">(+2 em abordagens do tipo "${D.TAGS[e.det[0]].rot}" nesta etapa)</span>`); if (r.crit) m.vantagem = true; }
   if (r.fc && chance(0.45)) { const rr = receberDano(dano('1d6'), 'complicação'); if (rr === -2) return morrerPJ('ferimento durante uma missão'); if (rr === -1) return desfechoDerrotaMissao(); }
   m.m = clamp(m.m + delta, 0, e.need); m.a = clamp(m.a + al, 0, m.amax);
@@ -3260,6 +3262,205 @@ function acaoLivre(txt, tagF) {
   else { if (r.fc || rel === 'hostil' && chance(0.3)) { addCalor(r.fc ? 10 : 4); } if (r.fc && chance(0.5) && tag === 'forca') { const rr = receberDano(dano('1d6'), 'ação mal sucedida'); if (rr === -2) return morrerPJ('ação mal calculada'); } if (r.fc && rel === 'hostil' && calorAtual() > 40 && chance(0.4)) { out('alerta', 'Isso chamou atenção demais: patrulhas se aproximam.'); iniciarCombate({ gen: { n: ri(2, 3) }, hook: 'combateLivre', surpresa: chance(0.4) ? 'inim' : null }); } }
 }
 
+/* ---- 08c_escolhas.js ---- */
+/* =====================================================================
+   08c · Escolhas concretas de cada etapa de missão
+   D.ESC[modelo][etapa] = [ [tag, rótulo, texto-sucesso, texto-falha], ... ]
+   A tag define a perícia e a mecânica; o texto é o que o jogador de fato faz e vê.
+   ===================================================================== */
+D.ESC = {};
+const ESC = (id, etapas) => { D.ESC[id] = etapas; };
+D.PARC = ['Mas o preço é tempo e atenção que você preferia não ter chamado.', 'Funciona, só que de um jeito mais ruidoso e arriscado do que queria.', 'Você consegue o essencial, deixando um rastro que talvez alguém siga.', 'Dá certo pela metade: avança, mas o ambiente fica mais tenso.'];
+D.KO2X = ['E o erro não passa despercebido: o clima à sua volta muda de uma vez.', 'Pior: alguém percebeu, e agora o relógio corre contra você.', 'O tropeço é visível demais para ser ignorado.'];
+
+ESC('infiltracao', [
+  [['investigar', 'Vigiar o local de longe e anotar turnos e rotinas', 'Você anota quem entra, quem sai e a que horas: a rotina tem falhas que dá para usar.', 'Você vigia sem método e perde o essencial; as anotações não servem para nada.'],
+   ['furtivo', 'Contornar o perímetro pela sombra, procurando uma brecha', 'Você rodeia o local sem ser visto e acha por onde passar.', 'Um sentinela quase o vê; você recua e perde um tempo precioso.'],
+   ['local', 'Perguntar a um morador o que ele sabe sobre o lugar', 'Uma conversa discreta rende detalhes que nenhum mapa mostra.', 'O morador desconversa — e parece guardar o seu rosto.']],
+  [['furtivo', 'Entrar pela porta lateral aproveitando um momento de distração', 'Você desliza para dentro enquanto a atenção do guarda está em outro ponto.', 'A porta range na pior hora; o guarda vira a cabeça e você congela.'],
+   ['engano', 'Entrar de frente, com passo firme e cara de quem tem ordem de estar ali', 'Ninguém questiona quem age como se pertencesse ao lugar.', 'Um guarda pede seus papéis e fica desconfiado com a demora da resposta.'],
+   ['tecnico', 'Abrir a fechadura com ferramentas, sem pressa', 'O mecanismo cede com um clique baixo; a porta se abre sem alarde.', 'A ferramenta escorrega e raspa no metal; o barulho ecoa no corredor.']],
+  [['furtivo', 'Pegar o que veio buscar e sair devagar, pelo mesmo caminho', 'Você sai como entrou: sem pressa, sem ruído, sem testemunhas.', 'Uma tábua do assoalho denuncia seu passo e uma voz pergunta quem está aí.'],
+   ['improviso', 'Provocar uma distração e sair em meio à confusão', 'Uma lata derrubada atrai todos para o outro lado — e você atravessa o caminho livre.', 'A distração chama a atenção para o lugar errado: o seu.'],
+   ['local', 'Sair por uma passagem de serviço que você notou ao chegar', 'A janela de serviço dá para um pátio e dali para a viela. Ninguém vigia.', 'A passagem está trancada por dentro e você perde minutos precisando de outro caminho.']]
+]);
+ESC('documentos', [
+  [['investigar', 'Observar o expediente e descobrir quem tem acesso aos papéis', 'Em um par de horas você sabe onde estão os papéis, quem tem a chave e quando sai para almoçar.', 'Você observa de mais e de menos: confunde os horários e fica com a pista errada.'],
+   ['social', 'Puxar conversa com um funcionário durante o intervalo', 'Entre um café e outro, o funcionário deixa escapar onde guardam o que você procura.', 'O funcionário fica calado e passa a olhar para você com desconfiança.'],
+   ['engano', 'Inventar um motivo oficial para fazer perguntas no local', 'Um pretexto bem contado abre a boca de quem devia ficar calado.', 'O pretexto não convence; alguém anota o seu nome.']],
+  [['engano', 'Apresentar-se como alguém com autorização para consultar os arquivos', 'O carimbo e a segurança com que você fala bastam: abrem-se as portas certas.', 'O responsável pede confirmação por escrito, que você não tem.'],
+   ['furtivo', 'Esperar a sala esvaziar e entrar sem ser visto', 'No intervalo do almoço o corredor fica vazio; você entra e fecha a porta atrás de si.', 'Alguém volta para buscar algo esquecido e quase o encontra no corredor.'],
+   ['tecnico', 'Forçar a gaveta ou o cofre onde estão os papéis', 'A trava cede depois de alguns minutos de trabalho cuidadoso.', 'O trinco range, resiste e faz mais barulho do que você suportaria.']],
+  [['furtivo', 'Fotografar ou copiar os papéis sem tirá-los do lugar', 'Você copia o que interessa e deixa tudo como estava: ninguém notará que alguém esteve ali.', 'A luz falha, a cópia sai borrada e você precisa repetir sob pressão.'],
+   ['improviso', 'Levar os papéis e deixar uma pista falsa no lugar', 'Uma pasta parecida no lugar da original compra horas até que alguém perceba.', 'A pasta falsa é folheada de imediato e a troca é percebida.'],
+   ['tecnico', 'Copiar os dados mais importantes à mão, com método', 'Anotações precisas em poucos minutos: o essencial está na sua cabeça e em seu bolso.', 'Você perde tempo com o que não importa e os papéis certos ficam para trás.']]
+]);
+ESC('toupeira', [
+  [['investigar', 'Comparar horários, álibis e quem sabia de cada operação', 'Duas reuniões em que só um grupo restrito sabia o horário revelam um padrão.', 'Os dados se contradizem; você acaba suspeitando de quem não devia.'],
+   ['social', 'Conversar em particular com cada suspeito', 'Cada conversa mostra um pouco: hesitações, mentiras pequenas, silêncios.', 'Um dos suspeitos percebe a intenção e passa a evitá-lo.'],
+   ['local', 'Perguntar a quem convive com o grupo, longe dos olhos dele', 'Quem está de fora vê o que quem está dentro não nota.', 'A conversa vaza e agora todos sabem que alguém anda perguntando.']],
+  [['engano', 'Dar a cada suspeito uma informação ligeiramente diferente', 'Cada versão é única: se vazar, você saberá exatamente por qual boca.', 'Uma das versões é desmentida por um colega, e a armadilha fica visível.'],
+   ['tecnico', 'Marcar um documento com sinal discreto que denuncie a cópia', 'A marca é quase invisível, mas basta para rastrear o caminho do papel.', 'A marca aparece cedo demais e alguém repara em algo estranho.'],
+   ['social', 'Deixar escapar uma informação falsa numa conversa casual', 'A isca é engolida com naturalidade: agora é só esperar quem morde.', 'Ninguém reage, e você fica sem saber se a isca funcionou ou foi ignorada.']],
+  [['social', 'Chamar o suspeito para uma conversa calma e franca', 'Sem gritos, o suspeito tropeça nas próprias palavras: você vê o que precisava ver.', 'A acusação sai antes da hora e o suspeito fecha a cara — talvez com razão.'],
+   ['engano', 'Fingir que já sabe tudo e observar a reação', 'O blefe funciona: o suspeito empalidece, e isso diz mais do que qualquer confissão.', 'Ele percebe o blefe e responde com uma calma que não deveria ter.'],
+   ['forca', 'Encurralar o suspeito e exigir a verdade', 'Pressionado, ele cede e conta o que sabe.', 'A pressão sai do controle: gritos, testemunhas e um inimigo novo.']]
+]);
+ESC('sabotagem', [
+  [['furtivo', 'Aproximar-se do alvo pela sombra, esperando a ronda passar', 'Você conta os passos da ronda e se esgueira para a posição certa.', 'Os cães latem ao longe; você recua e espera, perdendo tempo.'],
+   ['investigar', 'Vigiar o alvo por algumas horas e anotar o ritmo dos guardas', 'Os guardas têm hábitos fáceis de prever: você sabe quando e onde passar.', 'Você vigia de um ponto ruim e percebe quase nada.'],
+   ['local', 'Procurar um caminho de aproximação que ninguém usa', 'Um canal seco e um muro baixo levam quase até o alvo, longe das luzes.', 'O atalho que você escolheu termina num beco sem saída.']],
+  [['tecnico', 'Escolher o ponto mais frágil e instalar a carga com cuidado', 'Você posiciona o artefato no ponto de maior tensão, sem acionar nada por acidente.', 'Você hesita sobre o ponto certo e gasta minutos demais mexendo no explosivo.'],
+   ['furtivo', 'Instalar a carga esperando o guarda se afastar', 'Quando o guarda vira a esquina, você trabalha rápido e em silêncio.', 'O guarda volta mais cedo do que o previsto e você precisa se esconder com a carga na mão.'],
+   ['improviso', 'Improvisar um ponto de instalação com o que encontrar', 'Com fio, arame e um pouco de coragem, você monta algo que deve funcionar.', 'A montagem improvisada não parece firme; você a refaz com as mãos suadas.']],
+  [['fuga', 'Afastar-se depressa, antes do estouro', 'Você já está longe quando a explosão ilumina a noite.', 'Você corre, mas o barulho dos passos o denuncia à guarda.'],
+   ['local', 'Seguir pelo canal ou pela mata, apagando seu rastro', 'A água leva embora seu cheiro: os cães perdem a trilha.', 'A mata é mais fechada do que parecia; você se perde e ganha arranhões.'],
+   ['improviso', 'Misturar-se à confusão depois da explosão', 'No tumulto ninguém repara em mais um homem correndo na direção certa.', 'No tumulto um soldado o agarra pelo braço: "Você, venha cá!"']]
+]);
+ESC('resgate', [
+  [['investigar', 'Vigiar o local onde o prisioneiro deve estar mantido', 'Você identifica o prédio, as janelas e o turno dos guardas.', 'Você vigia o prédio errado durante horas.'],
+   ['social', 'Conversar com alguém de dentro — enfermeira, cozinheiro, faxineiro', 'Uma funcionária da cadeia sabe em qual cela ele está e se deixa convencer a ajudar.', 'A pessoa se assusta e promete nada dizer — o que, aqui, não é garantia nenhuma.'],
+   ['local', 'Pedir ajuda a quem conhece o bairro e os guardas', 'Um vizinho descreve rotinas e horários com a precisão de quem vê tudo da janela.', 'Quem você procurou também tem medo; a informação é vaga e atrasada.']],
+  [['furtivo', 'Entrar pelos fundos, por onde ninguém vigia', 'A saída de serviço está aberta e a lavanderia, vazia: você chega à cela em silêncio.', 'Uma porta rangente e um guarda desperto: o caminho se fecha.'],
+   ['engano', 'Apresentar-se como inspetor ou escolta para retirar o prisioneiro', 'Com uma ordem convincente, o guarda abre a porta e entrega o prisioneiro.', 'O sargento confere a ordem por telefone e a história desmonta.'],
+   ['forca', 'Render os guardas e abrir a cela à força', 'Rápido e preciso: os guardas são dominados antes de dar o alarme.', 'Um guarda é mais rápido do que parecia e o corpo a corpo vira bagunça.']],
+  [['fuga', 'Sair o mais rápido possível, carregando quem puder andar', 'Vocês cruzam os corredores e se perdem na rua antes do alarme.', 'O ferido atrasa o grupo; a fuga vira corrida desesperada.'],
+   ['local', 'Seguir uma rota alternativa, por barco ou por vielas', 'Um barqueiro cruza o rio até o amanhecer: ninguém os procura na outra margem.', 'O barqueiro não aparece e vocês ficam parados à vista de todos.'],
+   ['improviso', 'Esconder o resgatado numa casa e esperar a poeira baixar', 'Uma porta amiga se abre e a patrulha passa sem parar.', 'A casa escolhida é vigiada e vocês precisam recuar de novo.']]
+]);
+ESC('cientista', [
+  [['social', 'Conversar com ele com calma, sem pressa, mencionando um conhecido em comum', 'Ao ouvir o nome do colega, ele relaxa: acredita em você.', 'Ele recua e ameaça chamar a polícia; a conversa termina cedo.'],
+   ['engano', 'Apresentar-se com uma identidade que lhe inspire confiança', 'O disfarce funciona: ele vê em você o que esperava ver.', 'Ele percebe algo falso nos papéis e desconfia de tudo o que você diz.'],
+   ['investigar', 'Estudar seus hábitos antes de abordar', 'Você descobre o horário e o lugar certos para falar com ele a sós.', 'Você demora demais e uma vizinha já repara na sua presença.']],
+  [['furtivo', 'Levá-lo por vielas e caminhos de pouca vista', 'Vocês cruzam a cidade sem cruzar uma só patrulha.', 'Ele tropeça numa lata e a rua inteira acorda.'],
+   ['engano', 'Viajar com documentos falsos como se fossem pai e filho / colegas', 'Os papéis são examinados e devolvidos; ninguém duvida.', 'O guarda estranha um detalhe da assinatura e pede que vocês esperem.'],
+   ['local', 'Pedir ajuda a quem conhece a fronteira ou a linha de frente', 'Um guia local mostra a passagem que as patrulhas esqueceram.', 'O guia cobra caro e desaparece no meio do caminho.']],
+  [['fuga', 'Acelerar o passo e abandonar tudo o que atrasa', 'Vocês deixam o perseguidor para trás, por pouco.', 'O perseguidor está a poucos metros e o ritmo do cientista é um problema.'],
+   ['improviso', 'Separar-se e se reencontrar mais adiante', 'O perseguidor segue um dos dois e perde o outro.', 'Vocês se perdem um do outro e o cientista fica exposto.'],
+   ['local', 'Abrigar-se com alguém de confiança até a barra aliviar', 'A porta se abre rápido e se fecha em silêncio: vocês esperam o perigo passar.', 'A casa é conhecida demais e já está sendo vigiada.']]
+]);
+ESC('sinais', [
+  [['tecnico', 'Montar o equipamento de escuta e ajustar a antena', 'O sinal chega nítido; você começa a anotar.', 'A recepção falha e você perde as primeiras transmissões.'],
+   ['investigar', 'Procurar o melhor ponto e a melhor hora para a escuta', 'À noite, perto de uma torre alta, o sinal fica claro.', 'Você sobe ao ponto errado e capta só ruído.'],
+   ['furtivo', 'Escutar de um ponto escondido, sem chamar atenção', 'A escuta é paciente, silenciosa e produtiva.', 'Um vizinho estranha o equipamento e começa a perguntar.']],
+  [['tecnico', 'Trabalhar nos grupos de letras e números até achar o padrão', 'Aos poucos os símbolos se alinham: você começa a ler a mensagem.', 'A cifra resiste e as horas passam sem resultado.'],
+   ['investigar', 'Procurar repetições e erros do operador inimigo', 'Uma frase repetida é a brecha de que você precisava.', 'O padrão que você achou era coincidência.'],
+   ['improviso', 'Arriscar palpites sobre o conteúdo e testar contra o texto', 'O palpite bate com o texto e abre um caminho inesperado.', 'Você erra e perde uma noite inteira de trabalho.']],
+  [['social', 'Levar a informação ao oficial responsável e defender sua importância', 'Provas concretas convencem até o oficial mais desconfiado.', 'O oficial duvida de tudo e o acusa de exagero.'],
+   ['tecnico', 'Preparar um relatório curto, com provas claras', 'O relatório é tão claro que ninguém o ignora.', 'O relatório é longo e confuso; ninguém o lê com atenção.'],
+   ['local', 'Usar um contato de confiança para fazer a informação chegar', 'O contato leva a mensagem pelas mãos certas, sem ruído.', 'O contato demora demais e a informação perde valor.']]
+]);
+ESC('rede', [
+  [['social', 'Conversar com pessoas que podem se interessar pela causa', 'Algumas pessoas escutam com atenção — e uma delas oferece ajuda.', 'Alguém parece interessado demais, e isso incomoda.'],
+   ['investigar', 'Observar quem tem motivos para se arriscar e quem não tem', 'Um padeiro com um filho preso mostra pelo olhar que aceitaria.', 'Você escolhe errado e quase confia em quem não merece.'],
+   ['local', 'Pedir a alguém de confiança que indique nomes', 'Um amigo antigo indica três pessoas sérias e discretas.', 'O amigo indica gente demais e sem critério.']],
+  [['social', 'Ajudar com pequenos favores antes de pedir qualquer coisa', 'Comida, remédio, um conselho: a confiança nasce de pequenos atos.', 'O favor é interpretado como interesse, e a desconfiança cresce.'],
+   ['local', 'Participar da vida do bairro: missas, mercados, feiras', 'Você vira rosto conhecido; as portas começam a se abrir.', 'Você se expõe demais e vira assunto nas conversas.'],
+   ['engano', 'Criar uma boa história de cobertura para justificar sua presença', 'A cobertura é aceita e ninguém faz perguntas incômodas.', 'Um vizinho curioso desmonta um detalhe da história.']],
+  [['furtivo', 'Testar a rede com uma tarefa simples e discreta', 'A tarefa é cumprida sem ruído e ninguém suspeita.', 'Um dos recrutados se atrapalha e quase estraga tudo.'],
+   ['tecnico', 'Combinar sinais simples: uma cortina, uma cadeira, uma luz', 'O código é tão banal que ninguém repara — nem a polícia.', 'O sinal é confundido com outra coisa e a mensagem se perde.'],
+   ['social', 'Reunir os recrutados e reforçar as regras de silêncio', 'O grupo sai mais unido e mais cuidadoso.', 'A reunião chama atenção e alguém comenta com um conhecido.']]
+]);
+ESC('comboio', [
+  [['local', 'Escolher o ponto da emboscada ou da defesa e estudar o terreno', 'Uma curva fechada obriga o comboio a andar devagar: o ponto perfeito.', 'O terreno escolhido não oferece cobertura; você é obrigado a mudar.'],
+   ['furtivo', 'Ocupar a posição à noite, sem ser visto', 'Quando o sol nasce, você já está no lugar, imóvel.', 'Uma patrulha passa perto e você precisa se esconder por horas.'],
+   ['investigar', 'Contar os veículos e anotar horários da última passagem', 'A rotina do comboio fica clara: você sabe quando ele passa.', 'As informações que você colhe são antigas demais.']],
+  [['forca', 'Atacar o veículo de comando para desorganizar a coluna', 'O primeiro tiro certeiro derruba a ordem de toda a coluna.', 'O veículo de comando é blindado e a resposta é imediata.'],
+   ['tecnico', 'Bloquear a estrada ou sabotar o veículo da frente', 'O comboio para; a confusão joga a favor de você.', 'O bloqueio é desmontado em minutos e o comboio segue.'],
+   ['improviso', 'Usar o que houver à mão — pedras, fogo, o terreno — para ganhar vantagem', 'Uma ideia simples muda o equilíbrio do encontro.', 'A improvisação sai pela culatra e dá tempo ao inimigo.']],
+  [['fuga', 'Retirar-se depressa antes que cheguem reforços', 'Quando o reforço chega, só há fumaça e silêncio.', 'Os reforços chegam mais cedo do que previa.'],
+   ['local', 'Sumir por um caminho que só os locais conhecem', 'Um caminho de carroças esconde o grupo e o butim.', 'O caminho é lamacento e deixa um rastro enorme.'],
+   ['improviso', 'Espalhar pistas falsas para desviar a perseguição', 'A perseguição se perde atrás de pistas que não levam a lugar algum.', 'A pista falsa é descoberta e o inimigo vem direto até você.']]
+]);
+ESC('reconhecimento', [
+  [['furtivo', 'Avançar devagar, de cobertura em cobertura', 'Cada passo é medido; ninguém o vê.', 'Um galho estala e o silêncio fica pesado.'],
+   ['local', 'Usar o capim alto, as sombras e o relevo como cobertura', 'O terreno esconde a aproximação melhor do que qualquer disfarce.', 'O terreno é mais aberto do que parecia e você se vê exposto.'],
+   ['investigar', 'Observar o caminho antes de avançar, escolhendo a rota', 'Você descobre o caminho menos vigiado e segue por ele.', 'Você gasta tempo demais em observação e a luz do dia vira inimiga.']],
+  [['investigar', 'Contar posições, armas e movimentos; anotar tudo', 'A fumaça das cozinhas mostra onde está o grosso das tropas.', 'Você conta errado e a informação perde valor.'],
+   ['tecnico', 'Usar binóculos e mapa para medir distâncias e alcances', 'Medidas precisas: cada posição está no lugar certo do mapa.', 'A bruma atrapalha a medição; seus números são só estimativas.'],
+   ['furtivo', 'Aproximar-se mais para ver o que a distância esconde', 'Mais perto, você vê o que ninguém tinha visto.', 'Perto demais, um cão o sente antes de qualquer homem.']],
+  [['fuga', 'Voltar depressa, antes que o dia nasça', 'A noite cobre o retorno e você entrega o relatório inteiro.', 'O dia vem antes do esperado e você corre pelos campos.'],
+   ['furtivo', 'Voltar pelo mesmo caminho, devagar e em silêncio', 'O caminho conhecido torna a volta mais fácil.', 'Uma patrulha já está parada no seu caminho de volta.'],
+   ['local', 'Voltar por um caminho diferente, onde ninguém o espera', 'Um desvio longo, mas seguro: você chega inteiro.', 'O desvio é mais longo do que parecia e você chega exausto.']]
+]);
+ESC('evacuacao', [
+  [['social', 'Reunir o grupo e falar com calma e autoridade', 'Palavras firmes acalmam o grupo: todos aceitam seguir você.', 'O pânico vence e muita gente corre para casa.'],
+   ['improviso', 'Dividir tarefas rapidamente: quem carrega, quem guia, quem vigia', 'Em minutos o caos vira fila: cada um sabe o que fazer.', 'Os pedidos se atropelam e ninguém sabe a quem obedecer.'],
+   ['local', 'Pedir ajuda a alguém respeitado no lugar — um padre, um professor', 'Quando ele fala, ninguém discute.', 'A pessoa recusa ajudar, com medo das consequências.']],
+  [['local', 'Escolher um caminho de pastores, longe dos postos', 'Um caminho de cabras evita os postos de controle.', 'O caminho é longo e duro; o grupo reclama e atrasa.'],
+   ['tecnico', 'Planejar comida, água e abrigo para cada etapa', 'As paradas estão planejadas: ninguém passa fome.', 'Falta água na terceira parada e o grupo se desanima.'],
+   ['engano', 'Arranjar documentos e pretextos para a viagem', 'Papéis sanitários com carimbo conseguem abrir caminho.', 'Os papéis são examinados e um carimbo parece falso.']],
+  [['engano', 'Apresentar um atestado sanitário de aparência oficial', 'O oficial, cansado, aceita o papel e deixa todos passarem.', 'O oficial estranha o papel e faz perguntas demais.'],
+   ['social', 'Falar com o oficial do posto e convencê-lo a deixar passar', 'Um apelo humano abre uma porta que a lei fechava.', 'O oficial se mantém firme; você perde tempo e paciência.'],
+   ['improviso', 'Criar uma distração para passar o grupo aos poucos', 'Enquanto todos olham a distração, o grupo atravessa.', 'A distração chama atenção demais e o posto fica em alerta.']]
+]);
+ESC('crimes', [
+  [['furtivo', 'Aproximar-se pela mata, ao largo das patrulhas', 'Ninguém o vê chegar; a cerca está ao alcance.', 'Os guardas mudam o turno e você quase é visto.'],
+   ['engano', 'Fingir ser um funcionário, enfermeiro ou fornecedor', 'Um disfarce simples e um crachá bastam para entrar.', 'Alguém o reconhece como estranho e chama o superior.'],
+   ['local', 'Pedir ajuda a um sobrevivente que conhece uma passagem', 'Ele aponta uma brecha na cerca que ninguém guarda.', 'O sobrevivente tem medo demais para falar; você perde um dia.']],
+  [['investigar', 'Observar, anotar e fotografar o que acontece', 'Você registra datas, nomes, números e lugares com exatidão.', 'Você se aproxima demais e quase é visto — o registro sai incompleto.'],
+   ['social', 'Conversar com testemunhas e sobreviventes, garantindo seu anonimato', 'Uma testemunha fala, com a voz embargada: o relato é completo.', 'A testemunha se cala ao ver alguém a observar.'],
+   ['tecnico', 'Reunir documentos, listas e provas materiais', 'Listas e papéis oficiais provam o que foi feito e por quem.', 'Você pega papéis que não provam nada.']],
+  [['fuga', 'Sair o mais rápido possível, protegendo o que levou', 'Você sai antes que alguém sinta falta dos papéis.', 'A saída está vigiada e você precisa rodear horas.'],
+   ['furtivo', 'Esconder as provas e sair sem chamar atenção', 'Sem pressa, sem barulho: ninguém desconfia.', 'Um guarda faz perguntas e você precisa de uma boa resposta.'],
+   ['engano', 'Misturar as provas a uma carga inocente e sair em meio aos outros', 'As provas atravessam os postos dentro de uma carga qualquer.', 'A carga é revistada e você precisa agir depressa.']]
+]);
+ESC('sobrevivencia', [
+  [['furtivo', 'Mover-se só à noite, sem acender fogo', 'A escuridão cobre seus passos; a noite passa sem sustos.', 'Você tropeça no escuro e perde tempo e fôlego.'],
+   ['local', 'Procurar um abrigo para passar a noite — um celeiro, uma cabana', 'Uma cabana abandonada oferece teto e um fogo pequeno e escondido.', 'O abrigo está ocupado e você precisa seguir adiante.'],
+   ['investigar', 'Estudar o terreno e escolher a rota antes de andar', 'Você conhece o terreno: sabe onde está o perigo.', 'Você gasta horas escolhendo e o frio piora.']],
+  [['local', 'Procurar água e comida onde só os moradores sabem achar', 'Uma horta esquecida ainda dá batatas; um riacho, água limpa.', 'Você acha pouco e o estômago reclama.'],
+   ['improviso', 'Improvisar curativos, comida e um fogo escondido', 'Com pouco, você faz muito; o corpo se recupera.', 'As improvisações dão pouco e o cansaço pesa mais.'],
+   ['social', 'Pedir ajuda a um camponês, arriscando-se', 'Alguém dá pão e água, em silêncio, e fecha a porta.', 'O camponês se assusta e promete avisar a polícia.']],
+  [['fuga', 'Atravessar a última barreira depressa, sem olhar para trás', 'A corrente leva à margem segura; a travessia termina bem.', 'A correnteza é mais forte do que parecia e você chega ferido à outra margem.'],
+   ['furtivo', 'Esperar o momento certo e passar sem ser visto', 'Quando a patrulha se afasta, você atravessa devagar.', 'A patrulha volta e você precisa se esconder na água fria.'],
+   ['engano', 'Tentar passar pelo posto com uma história convincente', 'Uma boa história basta para um soldado cansado.', 'O soldado quer ver seus papéis e a história começa a ruir.']]
+]);
+ESC('batalha', [
+  [['tecnico', 'Posicionar armas e distribuir munição com método', 'Uma boa linha de fogo cobre o campo; cada homem sabe seu setor.', 'A distribuição sai desencontrada e falta munição onde importa.'],
+   ['local', 'Escolher posições e cobertura usando o terreno', 'O terreno joga a seu favor: muros, valas e árvores.', 'O terreno escolhido é pior do que parecia.'],
+   ['social', 'Falar com o grupo e alinhar as ordens', 'Cada homem entende sua tarefa; a confiança sobe.', 'As ordens se atropelam e a confusão cresce.']],
+  [['forca', 'Atacar com decisão no ponto mais fraco do inimigo', 'Um flanco aberto cede ao seu ataque: o inimigo recua.', 'O inimigo estava preparado e o ataque emperra.'],
+   ['social', 'Comandar o grupo, mantendo coragem e disciplina', 'Sob fogo, o grupo se mantém firme graças à sua voz.', 'Sua voz se perde no barulho e o grupo hesita.'],
+   ['improviso', 'Mudar de plano no meio do caminho, aproveitando a confusão', 'Uma ideia súbita desequilibra o combate.', 'A mudança de plano atrapalha os seus tanto quanto o inimigo.']],
+  [['forca', 'Aproveitar a vantagem e perseguir o inimigo em fuga', 'O inimigo cede terreno e prisioneiros; a posição é sua.', 'A perseguição vira uma armadilha e você recua com baixas.'],
+   ['social', 'Reorganizar o grupo, cuidar dos feridos e firmar a posição', 'A ordem volta: feridos tratados, armas contadas, posição firme.', 'O grupo está exausto e a ordem custa a voltar.'],
+   ['fuga', 'Recuar de forma ordenada, antes que a situação piore', 'Uma retirada bem feita salva muitos que seriam perdidos.', 'A retirada vira debandada.']]
+]);
+ESC('rendicao', [
+  [['social', 'Aproximar-se com bandeira branca e pedir para falar com o comandante', 'O oficial aceita ouvir: a conversa começa.', 'O oficial recusa e manda você embora.'],
+   ['investigar', 'Descobrir antes quem manda de verdade e quem tem mais a perder', 'O adjunto do comandante tem família em casa: ele quer sair com vida.', 'Você escolhe o interlocutor errado e perde um dia.'],
+   ['engano', 'Dar a entender que há mais tropas à espera', 'O blefe funciona: o oficial passa a escutar com outros olhos.', 'O blefe é descoberto e a confiança desaparece.']],
+  [['social', 'Propor condições claras e justas, com tratamento humano garantido', 'A promessa de tratamento humano pesa mais do que qualquer ameaça.', 'Os termos soam como ameaça e o oficial se fecha.'],
+   ['engano', 'Prometer o que você ainda não sabe se poderá cumprir', 'A promessa convence, mas você terá de se esforçar para cumpri-la.', 'A promessa vazia é percebida e arruína sua credibilidade.'],
+   ['investigar', 'Ouvir o outro lado e entender o que ele realmente teme', 'O que ele teme é simples: perder a honra. Você pode oferecer isso.', 'Você ouve, mas não entende o que está em jogo.']],
+  [['social', 'Garantir a confiança dos dois lados e vigiar quem pode atrapalhar', 'Com firmeza, você acalma os dois lados.', 'Há quem não confie em você e a tensão cresce.'],
+   ['improviso', 'Antecipar-se e afastar o fanático antes que ele aja', 'Você afasta o fanático antes que ele chegue perto do acordo.', 'O fanático percebe e age antes de você.'],
+   ['forca', 'Neutralizar à força quem tenta sabotar o acordo', 'Uma ação rápida elimina a ameaça sem estragar o acordo.', 'A violência assusta os dois lados e o acordo balança.']]
+]);
+ESC('defesa', [
+  [['tecnico', 'Reforçar a posição com sacos de areia, arame e trincheiras', 'Cada hora de trabalho vale um homem a mais: a posição está sólida.', 'O trabalho é mal feito e algumas partes cedem ao primeiro tiro.'],
+   ['local', 'Aproveitar muros, valas e construções já existentes', 'Um muro antigo vira uma excelente trincheira.', 'O que você escolhe não resiste a um ataque sério.'],
+   ['social', 'Organizar turnos de vigia, munição e água', 'Todos sabem o que fazer: a defesa é uma máquina.', 'A organização fica no papel e os homens se confundem.']],
+  [['forca', 'Responder ao primeiro ataque com fogo concentrado', 'O inimigo recua com baixas e sem fôlego.', 'O fogo é desordenado e o inimigo avança.'],
+   ['social', 'Manter a calma do grupo e reagir com disciplina', 'Sob fogo, todos mantêm a posição graças ao seu exemplo.', 'O nervosismo cresce e alguns recuam sem ordem.'],
+   ['tecnico', 'Preparar uma armadilha no caminho que o inimigo costuma usar', 'O inimigo cai na armadilha e paga caro.', 'A armadilha falha e denuncia a posição.']],
+  [['social', 'Animar os homens com palavras firmes e exemplo', 'Uma palavra sua sustenta a coragem de todos.', 'Suas palavras soam ocas e o ânimo cai.'],
+   ['improviso', 'Redistribuir munição e posições com o que sobrou', 'Com pouco, você mantém a linha de pé.', 'Falta munição em pontos críticos e a linha enfraquece.'],
+   ['forca', 'Contra-atacar para ganhar fôlego', 'O contra-ataque surpreende e dá tempo ao seu lado.', 'O contra-ataque é rechaçado e custa caro.']]
+]);
+ESC('patrulha', [
+  [['investigar', 'Percorrer o setor atento a rastros, ruídos e movimentos', 'Marcas de botas recentes saem da estrada e entram no mato.', 'A rotina cega: você nota quase nada.'],
+   ['local', 'Perguntar a moradores o que anda diferente por ali', 'Quem vive no lugar sabe quando algo foge do normal.', 'Os moradores evitam falar com patrulhas.'],
+   ['tecnico', 'Seguir o plano de rota com paradas e escutas', 'O método traz resultado: você cobre cada ponto sem falhas.', 'O método vira rotina e você deixa passar o que importa.']],
+  [['investigar', 'Observar a anomalia à distância antes de agir', 'A luz é um sinal combinado, não um acaso.', 'Você observa de longe demais e entende pouco.'],
+   ['furtivo', 'Aproximar-se devagar para ver melhor', 'Mais perto, você enxerga o que ninguém mais viu.', 'Você é visto antes de ver.'],
+   ['social', 'Abordar quem estiver por perto e fazer perguntas diretas', 'A abordagem franca desarma: a pessoa conta o que sabe.', 'A abordagem assusta e a pessoa foge.']],
+  [['social', 'Resolver conversando, com calma e firmeza', 'A boa ordem e a calma resolvem mais que a violência.', 'A conversa não rende e o clima azeda.'],
+   ['forca', 'Intervir de imediato, com ordem de parar', 'A intervenção firme corta o problema pela raiz.', 'A ordem é desobedecida e a situação piora.'],
+   ['improviso', 'Resolver da forma que a situação pedir', 'Uma solução simples e inesperada funciona.', 'A solução improvisada piora o problema.']]
+]);
+
 /* ---- 09_parser.js ---- */
 /* =====================================================================
    09 · Despachante de entrada e analisador de linguagem natural
@@ -3471,10 +3672,16 @@ function menuMissao() {
     I.push(menuItem('Ajudar quem está em apuros', 'ajudo os civis', { g: 'Decisão', d: 'custa tempo e expõe você, mas protege vidas' }), menuItem('Seguir adiante sem eles', 'sigo em frente', { g: 'Decisão' }));
     return { titulo: 'Missão — uma decisão difícil', ctx: 'missao', sub: e.n, itens: I };
   }
-  const ordem = ['investigar', 'furtivo', 'social', 'engano', 'tecnico', 'forca', 'local', 'improviso', 'fuga', 'esperar'];
-  for (const tag of ordem) { const [ic, rot] = TAG_ROT[tag]; I.push(menuItem(ic + ' ' + rot, '@tag:' + tag, { g: 'Como abordar esta etapa', d: tag === 'esperar' ? 'deixa a situação se mostrar; reduz o alerta' : 'sua melhor perícia: ' + menuMelhorHab(tag) })); }
-  I.push(menuNav('Usar um item…', 'itens', { g: 'Outras' }), menuItem('Ver ideias', '/ideias', { g: 'Outras' }), menuItem('Ver ficha', '/ficha', { g: 'Outras' }), menuItem('Abandonar a missão', 'abandonar missão', { g: 'Outras', d: 'há consequências para sua reputação' }));
-  if (p.habUsos > 0 && D.CLASSES[p.classe].excl.ativa) I.splice(I.length - 4, 0, menuItem('Usar habilidade especial: ' + D.CLASSES[p.classe].excl.ativa.nome, '/habilidade', { g: 'Outras' }));
+  const ops = (D.ESC[m.tpl] || [])[m.est];
+  if (ops) {
+    m.feitas = m.feitas || {}; let livres = ops.map((o, i) => i).filter(i => !m.feitas[m.est + ':' + i]); if (!livres.length) { ops.forEach((o, i) => delete m.feitas[m.est + ':' + i]); livres = ops.map((o, i) => i); }
+    livres.forEach(i => { const o = ops[i]; I.push(menuItem(o[1], '@esc:' + i, { g: 'O que você faz', d: 'perícia: ' + menuMelhorHab(o[0]) })); });
+  }
+  else for (const tag of ['investigar', 'furtivo', 'social', 'engano', 'tecnico', 'forca', 'local', 'improviso', 'fuga']) { const [ic, rot] = TAG_ROT[tag]; I.push(menuItem(ic + ' ' + rot, '@tag:' + tag, { g: 'O que você faz', d: 'sua melhor perícia: ' + menuMelhorHab(tag) })); }
+  I.push(menuItem('Esperar e observar, sem agir', '@tag:esperar', { g: 'O que você faz', d: 'gasta tempo, mas reduz o alerta' }));
+  I.push(menuNav('Usar um item…', 'itens', { g: 'Outras' }));
+  if (p.habUsos > 0 && D.CLASSES[p.classe].excl.ativa) I.push(menuItem('Habilidade especial: ' + D.CLASSES[p.classe].excl.ativa.nome, '/habilidade', { g: 'Outras' }));
+  I.push(menuNav('Ficha, mapa, contatos…', 'mais', { g: 'Outras' }), menuItem('Abandonar a missão', 'abandonar missão', { g: 'Outras', d: 'há consequências para sua reputação' }));
   return { titulo: 'Missão — ' + e.n, ctx: 'missao', sub: m.titulo, itens: I };
 }
 /* ---------- mundo livre e submenus ---------- */
@@ -3493,16 +3700,16 @@ function menuMundo(tela) {
     else I.push(menuItem('Pedir ordens / procurar trabalho', '/missoes', { g: 'Trabalhos disponíveis' }));
     if (p.ptsHab > 0 || p.ptsAtr > 0 || p.espPend > 0) I.push(menuItem('⬆ Evoluir o personagem (há pontos a gastar)', '/evoluir', { g: 'Agora' }));
     if (p.ferimentos.length || p.hp < p.hpMax) I.push(menuItem('Tratar ferimentos', 'trato meus ferimentos', { g: 'Agora', d: `${Math.round(p.hp)}/${p.hpMax} PV` }));
-    I.push(menuItem('Observar os arredores', 'observo os arredores', { g: 'Explorar' }), menuItem('Procurar um contato', 'procuro um contato', { g: 'Explorar' }), menuNav('Ir a outro lugar daqui…', 'ir', { g: 'Explorar', d: nomeSitio(G.local.sitio) }), menuNav('Viajar para outra região…', 'viajar:0', { g: 'Explorar', d: reg().nome }));
+    I.push(menuItem('Observar os arredores', 'observo os arredores', { g: 'Explorar' }), menuItem('Procurar um contato', 'procuro um contato', { g: 'Explorar' }), menuNav('Ir a outro lugar daqui…', 'ir', { g: 'Explorar', d: 'agora em: ' + nomeSitio(G.local.sitio) }), menuNav('Viajar para outra região…', 'viajar:0', { g: 'Explorar', d: reg().nome }));
     const aqui = npcsAqui(); I.push(menuNav('Falar com alguém…', 'falar', { g: 'Pessoas', d: aqui.length ? aqui.length + ' conhecido(s) aqui' : 'puxar conversa com desconhecidos' }));
-    I.push(menuNav('Mercado e comércio…', 'comercio', { g: 'Comércio' }), menuNav('Itens e equipamento…', 'itens', { g: 'Pessoal' }), menuItem('Descansar 1 hora', 'descanso 1 hora', { g: 'Pessoal' }), menuItem('Descansar 4 horas', 'descanso 4 horas', { g: 'Pessoal' }), menuItem('Descansar 8 horas', 'descanso 8 horas', { g: 'Pessoal' }));
-    if (p.habUsos > 0 && D.CLASSES[p.classe].excl.ativa) I.push(menuItem('Habilidade especial: ' + D.CLASSES[p.classe].excl.ativa.nome, '/habilidade', { g: 'Pessoal' }));
+    I.push(menuNav('Mercado e comércio…', 'comercio', { g: 'Comércio' }), menuNav('Itens e equipamento…', 'itens', { g: 'Pessoal' }), menuNav('Descansar…', 'descansar', { g: 'Pessoal', d: p.hp < p.hpMax ? 'recupera PV' : 'passa o tempo' }));
     if (Object.keys(G.conh.segs).length) I.push(menuNav('Informações sigilosas…', 'segredos', { g: 'Pessoal' }));
     I.push(menuNav('Ficha, mapa, contatos e mais…', 'mais', { g: 'Consultar' }));
     return { titulo: 'O que você faz?', ctx: 'livre', sub: `${reg().nome} · ${nomeSitio(G.local.sitio)}`, itens: I };
   }
-  const titulos = { ir: 'Ir a…', viajar: 'Viajar para…', falar: 'Falar com…', comercio: 'Comércio', mercado: 'Mercado', vender: 'Vender', itens: 'Itens e equipamento', segredos: 'Informações sigilosas', mais: 'Consultar' };
-  if (t0 === 'ir') { Object.keys(D.SITIOS).filter(k => k !== G.local.sitio).forEach(k => I.push(menuItem(D.SITIOS[k].nome, '@sitio:' + k, { g: 'Lugares' }))); }
+  const titulos = { descansar: 'Descansar', ir: 'Ir a…', viajar: 'Viajar para…', falar: 'Falar com…', comercio: 'Comércio', mercado: 'Mercado', vender: 'Vender', itens: 'Itens e equipamento', segredos: 'Informações sigilosas', mais: 'Consultar' };
+  if (t0 === 'descansar') { [['1 hora', 'uma pausa curta'], ['4 horas', 'recupera parte das forças'], ['8 horas', 'uma noite de sono']].forEach(([h, d]) => I.push(menuItem('Descansar ' + h, 'descanso ' + h, { g: 'Quanto tempo', d }))); }
+  else if (t0 === 'ir') { Object.keys(D.SITIOS).filter(k => k !== G.local.sitio).forEach(k => I.push(menuItem(D.SITIOS[k].nome, '@sitio:' + k, { g: 'Lugares' }))); }
   else if (t0 === 'viajar') {
     const pag = +a1 || 0, a = reg(); const arr = Object.values(D.REGIOES).filter(r => r.id !== a.id).map(r => ({ r, d: distKm(a, r) })).sort((x, y) => x.d - y.d); const fatia = arr.slice(pag * 12, pag * 12 + 12);
     fatia.forEach(x => { const rel = relRegiao(x.r.id); I.push(menuItem(x.r.nome, '@viajar:' + x.r.id, { g: 'Destinos (do mais próximo ao mais distante)', d: `${Math.round(x.d)} km · ${G.conh.regioes[x.r.id] ? { amigo: '🟢 aliada', hostil: '🔴 hostil', neutro: '⚪ neutra', contestado: '🟠 disputada' }[rel] : 'região desconhecida'}` })); });
@@ -3537,6 +3744,7 @@ function menuMundo(tela) {
 const FALA_TEXTO = { conversa: 'converso com ele', rumores: 'pergunto a ele sobre rumores', informacoes: 'pergunto a ele sobre informações', quem: 'pergunto a ele quem e voce', trabalho: 'pergunto a ele por trabalho', persuadir: 'tento persuadir ele', suborno: 'ofereço suborno a ele', intimidar: 'ameaço ele', recrutar: 'peço a ele que venha comigo' };
 function menuExec(cmd) {
   const [k, a, b] = String(cmd).slice(1).split(':'); const p = G.pj; const tp = G.cena.tipo;
+  if (k === 'esc') { if (tp !== 'missao' || !G.missao) return say('Não há missão em andamento.'); const o = ((D.ESC[G.missao.tpl] || [])[G.missao.est] || [])[+a]; if (!o) return; return agirMissao(o[1], o[0], null, o, +a); }
   if (k === 'tag') { if (tp !== 'missao' || !G.missao) return say('Não há missão em andamento.'); if (!D.TAGS[a]) return; return agirMissao(TAG_ROT[a][2], a); }
   if (k === 'usar' && (tp === 'livre' || tp === 'missao')) return usarItem('uso ' + nomeItem(a), a);
   if (tp !== 'livre') return say('Esta ação não está disponível agora.');
