@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Segunda Guerra Mundial — Sombras da Guerra · RPG de texto</title>
-<meta name="description" content="RPG de texto interativo ambientado na Segunda Guerra Mundial: crie seu personagem, aja com suas próprias palavras e viva (ou altere) a história. Roda no navegador, sem instalação.">
+<meta name="description" content="RPG de texto interativo ambientado na Segunda Guerra Mundial: crie seu personagem, escolha suas ações e viva (ou altere) a história. Roda no navegador, sem instalação.">
 <meta name="theme-color" content="#12100c">
 <style>
 :root{
@@ -220,6 +220,25 @@ table.attr td b{color:var(--ac);font-size:.7rem;letter-spacing:.1em}
 .wz-split .wz-cols{grid-template-columns:1fr}
 @media (max-width:1180px){.wz-tab span{display:none}.wz-tab.on span{display:inline}.wz-split{grid-template-columns:1fr}.wz-split .wz-det{position:static;max-height:none}}
 
+/* ===== Menu de ações ===== */
+#chips2.mn{display:block;padding:0;border-top:1px solid var(--line);background:#15130e;max-height:46vh;overflow-y:auto;position:relative}
+#chips2.mn.fechado{max-height:none;overflow:visible}
+.mn-top{display:flex;align-items:center;gap:8px;padding:8px 14px;position:sticky;top:0;background:#1b1812;border-bottom:1px solid var(--line);z-index:1}
+.mn-t{flex:1;min-width:0;font-size:.9rem;line-height:1.3}.mn-t b{color:var(--ac2)}
+.mn-b{font-size:.72rem;padding:4px 9px;background:var(--bg3)}.mn-b.on{background:var(--ac);color:#1a1405;border-color:var(--ac);font-weight:700}
+.mn-g{padding:8px 14px 2px;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}
+.mn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;padding:4px 14px 6px}
+.mn-i{display:flex;align-items:flex-start;gap:9px;text-align:left;font-family:var(--serif);font-size:.9rem;line-height:1.3;padding:7px 10px;background:var(--bg2);border:1px solid var(--line);border-radius:8px;color:var(--tx)}
+.mn-i b{font-weight:600}.mn-i small{display:block;color:var(--dim);font-size:.74rem;margin-top:1px}
+.mn-i kbd{flex:0 0 18px;height:18px;border-radius:4px;border:1px solid var(--line);background:var(--bg3);font:600 .68rem var(--mono);color:var(--ac);display:inline-grid;place-items:center;margin-top:1px}
+.mn-i kbd:empty{border-color:transparent;background:none}
+.mn-i:hover:not(:disabled){border-color:var(--ac);background:#2b2415}
+.mn-i.nav{border-style:dashed}.mn-i.nav b::after{content:" ›";color:var(--ac)}
+.mn-i.volta{background:transparent;border-style:solid;color:var(--dim);max-width:200px}.mn-i.volta b::after{content:""}
+.mn-i:disabled{opacity:.45;cursor:not-allowed}
+body.menu-on #inputbar{border-top:1px dashed var(--line)}
+@media (max-width:860px){#chips2.mn{max-height:50vh}.mn-grid{grid-template-columns:1fr;padding:4px 10px 6px}.mn-g,.mn-top{padding-left:10px;padding-right:10px}.mn-i kbd{display:none}}
+
 </style>
 </head>
 <body>
@@ -245,7 +264,7 @@ table.attr td b{color:var(--ac);font-size:.7rem;letter-spacing:.1em}
     <h1>Sombras da Guerra</h1>
     <div class="sub">Segunda Guerra Mundial · 1939–1945</div>
     <div class="tx">
-      <p>Escolha um momento da guerra, uma nação, uma classe — soldado, espião, médico, piloto, jornalista, resistente — e <b>aja com suas próprias palavras</b>. Os dados d20 decidem; o mundo continua, com ou sem você.</p>
+      <p>Escolha um momento da guerra, uma nação, uma classe — soldado, espião, médico, piloto, jornalista, resistente — e <b>escolha suas ações</b> entre as opções de cada momento (ou escreva com suas próprias palavras, se preferir). Os dados d20 decidem; o mundo continua, com ou sem você.</p>
       <p class="small">A história é tratada com respeito: ocupação, guerra e atrocidades — inclusive o Holocausto — aparecem com a seriedade que merecem. Nenhum regime criminoso é glorificado.</p>
     </div>
     <div class="btns">
@@ -2165,7 +2184,7 @@ function acaoCombateInf(txt) {
   else if (has('ordeno', 'ordem', 'equipe', 'esquadr', 'pelotao', 'grupo avanc', 'comando', 'lidero', 'rally', 'reagrup')) consumiu = ordenarEquipe(t);
   else if (has('granad', 'molotov', 'bazuca', 'panzerfaust', 'antitanque', 'piat', 'lanc', 'arremess', 'jogo')) consumiu = lancarGranada(t);
   else if (has('mirar', 'miro', 'mirando', 'apont', 'respiro', 'prendo a respiracao', 'calmo')) { cb.pj.mirou = true; cb.pj.supMira = 0; say('Você controla a respiração e alinha a mira. O próximo disparo será mais preciso.'); }
-  else if (has('suprim', 'cobertura de fogo', 'mantenho a cabeca', 'varro', 'metralho')) consumiu = suprimir(t);
+  else if (has('suprim', 'supress', 'cobertura de fogo', 'mantenho a cabeca', 'varro', 'metralho')) consumiu = suprimir(t);
   else if (has('rajada', 'automatic', 'esvazio', 'despejo')) consumiu = atacar(t, 'rajada');
   else if (has('corpo a corpo', 'esfaque', 'faca', 'baioneta', 'soco', 'coronha', 'estrangul', 'garrote', 'golpe')) { consumiu = atacar(t, 'corpo'); }
   else if (has('atir', 'dispar', 'tiro', 'fuzil', 'mat', 'elimin', 'abat', 'ataco', 'ataque', 'acerto')) consumiu = atacar(t, 'tiro');
@@ -2757,7 +2776,7 @@ function ctxMissao(m) { const ng = npc(m.ng); return { alvo: m.alvo, inim: 'o in
 function iniciarMissao(of) {
   const t = D.MT[of.tpl]; const m = G.missao = { id: of.id, tpl: of.tpl, titulo: of.titulo, alvo: of.alvo, ng: of.ng, inim: of.inim, inimChave: of.inimChave, regiao: of.regiao, dcAdj: of.dcAdj, prazo: of.prazo, xp: of.xp, din: of.din, est: 0, m: 0, a: 0, amax: 3, alarmes: 0, ini: G.dia, rev: {}, hist: [], dilema: false, vantagem: false, passos: 0, estagiosOk: 0, civ: 0, twist: false };
   G.cena = { tipo: 'missao' }; conhecerRegiao(m.regiao, 2);
-  cartao('🎯 ' + of.titulo, `<p>${fmt(tpl(t.intro, ctxMissao(m)))}</p><p class="dim">Prazo: ${dataStr(of.prazo, true)} · Recompensa estimada: ${of.xp} XP e ${fmtDin(of.din)}.</p><p class="dim">Descreva o que fará, com suas próprias palavras. Digite <b>/ideias</b> se quiser inspiração, ou <b>abandonar missão</b> para desistir.</p>`, 'missao');
+  cartao('🎯 ' + of.titulo, `<p>${fmt(tpl(t.intro, ctxMissao(m)))}</p><p class="dim">Prazo: ${dataStr(of.prazo, true)} · Recompensa estimada: ${of.xp} XP e ${fmtDin(of.din)}.</p><p class="dim">Escolha no menu como abordar cada etapa — ou ative <b>✍ Ação livre</b> para descrever a ação com suas palavras. Para desistir: <b>Abandonar a missão</b>.</p>`, 'missao');
   const ng = npc(m.ng); npcMem(ng, 'Passou-me uma missão', 0); mostrarEstagio();
 }
 function estAtual() { const m = G.missao; return D.MT[m.tpl].est[m.est]; }
@@ -2994,8 +3013,8 @@ function listarDestinos() {
   cartao('🧭 Destinos', '<p class="dim">Diga: <b>viajar para [lugar]</b>. Mais próximos:</p>' + li(arr.map(x => `${esc(x.r.nome)} — ${Math.round(x.d)} km <span class="dim">(${G.conh.regioes[x.r.id] ? CTRL_ICON[ctrlDe(x.r.id)] || '' : 'região desconhecida'})</span>`)));
 }
 const CTRL_ICON = { eixo: 'sob o Eixo (última informação)', aliados: 'sob os Aliados', sovietico: 'sob os soviéticos', finlandes: 'finlandesa', neutro: 'neutra', vichy: 'Vichy', contestado: 'disputada' };
-function viajar(txt) {
-  const p = G.pj, id = acharRegiao(txt); if (!id) return listarDestinos(); if (id === G.local.regiao) return say('Você já está lá.');
+function viajar(txt, idF) {
+  const p = G.pj, id = idF || acharRegiao(txt); if (!id) return listarDestinos(); if (id === G.local.regiao) return say('Você já está lá.');
   const a = reg(), b = D.REGIOES[id], km = distKm(a, b); const rel = relRegiao(id);
   const mar = [a.amb, b.amb].includes('mar') || (['T', 'X', 'F'].includes(b.macro) !== ['T', 'X', 'F'].includes(a.macro)) || (km > 2500);
   if (G.dia > diaDe('1945-09-02') && false) { }
@@ -3068,17 +3087,17 @@ function acharItemPorNome(txt, lista) {
   return sc >= 10 ? melhor : null;
 }
 function qtdDoTexto(txt) { const t = norm(txt); const m = t.match(/\b(\d{1,3})\b/); if (m) return clamp(parseInt(m[1], 10), 1, 200); const w = { um: 1, uma: 1, dois: 2, duas: 2, tres: 3, quatro: 4, cinco: 5, seis: 6, dez: 10, doze: 12, vinte: 20 }; for (const k in w) if (new RegExp('\\b' + k + '\\b').test(t)) return w[k]; return 1; }
-function comprar(txt) {
-  const p = G.pj; const neg = /(negro|contrabando|clandestin|sem perguntas)/.test(norm(txt)); const itens = estoqueMercado(neg); const lista = itens.concat(neg ? [] : []);
-  const id = acharItemPorNome(txt, lista); if (!id) { say('Não encontrei esse item à venda' + (neg ? ' no mercado negro' : '') + '. Digite <b>mercado</b>' + (neg ? ' negro' : '') + ' para ver a lista.'); return; }
+function comprar(txt, idF, negF) {
+  const p = G.pj; const neg = negF != null ? negF : /(negro|contrabando|clandestin|sem perguntas)/.test(norm(txt)); const itens = estoqueMercado(neg); const lista = itens.concat(neg ? [] : []);
+  const id = idF && lista.includes(idF) ? idF : acharItemPorNome(txt, lista); if (!id) { say('Não encontrei esse item à venda' + (neg ? ' no mercado negro' : '') + '. Digite <b>mercado</b>' + (neg ? ' negro' : '') + ' para ver a lista.'); return; }
   const q = qtdDoTexto(txt); const unit = precoItem(id, neg), total = Math.round(unit * q * 100) / 100;
   if (p.din < total) { say(`Você não tem dinheiro suficiente: ${q}× ${esc(nomeItem(id))} custaria ${fmtDin(total, localNac())}; você tem ${fmtDin(p.din, p.nac)}.`); return; }
   p.din = Math.round((p.din - total) * 100) / 100; addItem(id, q); passarTempo(ri(10, 25), { esforco: 1 });
   say(`Você compra ${q}× <b>${esc(nomeItem(id))}</b> por ${fmtDin(total, localNac())}.`);
   if (neg) { addCalor(3); if (relRegiao(G.local.regiao) !== 'amigo' && chance(0.07)) { out('alerta', 'Um comprador desconhecido o observa demais. Você terá de sumir depressa.'); addCalor(10); } }
 }
-function vender(txt) {
-  const p = G.pj; const inv = p.inv.map(e => e.id); const id = acharItemPorNome(txt, inv); if (!id) { say('Você não tem esse item. Veja <b>/inventario</b>.'); return; }
+function vender(txt, idF) {
+  const p = G.pj; const inv = p.inv.map(e => e.id); const id = idF && inv.includes(idF) ? idF : acharItemPorNome(txt, inv); if (!id) { say('Você não tem esse item. Veja <b>/inventario</b>.'); return; }
   const e = p.inv.find(x => x.id === id); const q = Math.min(qtdDoTexto(txt), e.qtd); const neg = /(negro|contrabando)/.test(norm(txt)); const unit = Math.round(precoItem(id, false) * (neg ? 0.6 : 0.4) * 100) / 100;
   if (D.ARMAS[id] && D.ARMAS[id].tipo !== 'granada' && relRegiao(G.local.regiao) === 'hostil' && !neg) { say('Vender uma arma abertamente aqui seria um convite à prisão. Tente o mercado negro: <b>vender ' + esc(nomeItem(id)) + ' no mercado negro</b>.'); return; }
   const total = Math.round(unit * q * 100) / 100; remItem(id, q); if (p.armaAtivaRef && !p.inv.includes(p.armaAtivaRef)) p.armaAtivaRef = null; p.din = Math.round((p.din + total) * 100) / 100; say(`Você vende ${q}× <b>${esc(nomeItem(id))}</b> por ${fmtDin(total, localNac())}.`); if (neg) addCalor(2);
@@ -3177,8 +3196,8 @@ function tratarFeridas(txt) {
   const r = teste({ hab: 'primeiros_socorros', dc: 11 + (it ? 0 : 4), acao: 'Tratar seus ferimentos' + (it ? ' com ' + nomeItem(it) : ' sem material') });
   if (r.ok || r.parcial) { if (it && it !== 'morfina') remItem(it, 1); p.ferimentos.forEach(f => { f.sangra = false; f.tratado = true; if (r.crit && f.inf) f.inf = false; }); const c = curarPJ(dano(it === 'kit_primeiros' ? '1d6+3' : '1d4') + (r.crit ? 3 : 0)); passarTempo(30, { esforco: 0.3 }); say(`Os ferimentos são tratados (${c} PV).`); } else say('O curativo sai mal feito. O ferimento continua incomodando.');
 }
-function usarItem(txt) {
-  const p = G.pj, t = norm(txt); const inv = p.inv.map(e => e.id); const id = acharItemPorNome(txt.replace(/\b(equipar|equipo|empunho|visto|uso|usar|como|bebo|beber|leio|ler)\b/gi, ''), inv); if (!id) return say('Você não tem esse item. Veja <b>/inventario</b>.');
+function usarItem(txt, idF) {
+  const p = G.pj, t = norm(txt); const inv = p.inv.map(e => e.id); const id = idF && inv.includes(idF) ? idF : acharItemPorNome(txt.replace(/\b(equipar|equipo|empunho|visto|uso|usar|como|bebo|beber|leio|ler)\b/gi, ''), inv); if (!id) return say('Você não tem esse item. Veja <b>/inventario</b>.');
   const e = p.inv.find(x => x.id === id), i = infoItem(id);
   if (D.ARMAS[id]) { p.armaAtivaRef = e; return say(`Você empunha: <b>${esc(D.ARMAS[id].nome)}</b>.`); }
   if (i.tipo === 'comida') { remItem(id, 1); p.fome = clamp(p.fome - (i.fome || 20), 0, 100); passarTempo(10, { esforco: 0.2 }); if (i.mental) ganharMental(i.mental); return say(`Você consome: ${esc(i.nome)}. Fome: ${Math.round(p.fome)}%.`); }
@@ -3263,6 +3282,7 @@ function processar(texto) {
 }
 function despachar(texto) {
   const t = norm(texto);
+  if (texto[0] === '@') { if (G.fase === 'jogo' && G.pj) return menuExec(texto); return say('Ação indisponível agora.'); }
   if (texto[0] === '/' || SOLTOS.test(t)) { if (comando(texto)) return; }
   if (G.fase === 'criacao') return criacaoEntrada(texto);
   if (G.fase === 'morto') return say('Seu personagem morreu. Digite <b>/novo</b> para criar outro personagem no mesmo mundo e na mesma data, ou <b>/carregar</b> para recuperar um registro.');
@@ -3375,6 +3395,156 @@ function livreEntrada(texto) {
   if (RX.usar.test(t)) { const inv = p.inv.map(e => e.id); if (acharItemPorNome(texto.replace(/\b(uso|usar|equipo|equipar|empunho|saco|visto|vestir|como|comer|bebo|beber|consumo|leio|ler|acendo|abro)\b/gi, ''), inv)) return usarItem(texto); }
   if (RX.observar.test(t)) return acaoObservar(texto);
   if (D.LIDERES.test(t) || true) return acaoLivre(texto);
+}
+
+/* ---- 09b_menu.js ---- */
+/* =====================================================================
+   09b · Menu de ações pré-definidas (sem DOM)
+   menuAcoes(tela) → { titulo, ctx, itens:[{r,d,c,tela,g,off}] }
+     c    = texto enviado a processar()  (começa com "@" para ações por identificador)
+     tela = navegação interna do menu (não consome tempo)
+   menuExec(cmd) executa os comandos "@..." chamados pelo parser.
+   ===================================================================== */
+const MENU_PAG = 10;
+const SITIO_PALAVRA = { qg: 'quartel', rua: 'ruas', mercado: 'mercado', taverna: 'taverna', hospital: 'hospital', estacao: 'estacao', abrigo: 'abrigo', igreja: 'igreja', campo: 'campo aberto' };
+const TAG_ROT = {
+  investigar: ['🔍', 'Observar e investigar', 'observo com atenção'], furtivo: ['🌑', 'Avançar furtivamente', 'avanço furtivamente'], social: ['💬', 'Conversar e persuadir', 'converso e persuado'],
+  engano: ['🎭', 'Disfarce e blefe', 'me disfarço e blefo'], tecnico: ['🔧', 'Usar conhecimento técnico', 'uso minha técnica'], forca: ['⚔', 'Agir pela força', 'ataco pela força'],
+  local: ['🧭', 'Usar o terreno e contatos locais', 'uso o terreno e contatos locais'], improviso: ['🎲', 'Improvisar', 'improviso'], fuga: ['🏃', 'Evadir / fugir', 'fujo e evado'], esperar: ['⏳', 'Esperar o momento certo', 'espero']
+};
+const menuItem = (r, c, o) => Object.assign({ r, c }, o || {});
+const menuNav = (r, tela, o) => Object.assign({ r, tela }, o || {});
+function menuMelhorHab(tag) {
+  const p = G.pj; const hs = (D.TAGS[tag].hab || []).filter(h => D.HABS[h]); if (!hs.length) return '';
+  const k = hs.slice().sort((a, b) => (p.hab[b] || 0) - (p.hab[a] || 0))[0]; const v = p.hab[k] || 0; return `${D.HABS[k].nome} ${v}`;
+}
+function menuAcoes(tela) {
+  tela = tela || 'raiz'; const p = G && G.pj;
+  if (!G || (G.fase !== 'jogo' && G.fase !== 'morto') || (G.fase === 'jogo' && !p)) return { titulo: '', ctx: 'nenhum', itens: [] };
+  if (G.fase === 'morto') return { titulo: 'Seu personagem morreu', ctx: 'morto', itens: [menuItem('Novo personagem no mesmo mundo', '/novo', { g: 'Continuar' }), menuItem('Carregar um registro salvo', '/carregar', { g: 'Continuar' })] };
+  const tp = G.cena.tipo;
+  if (tp === 'combate' && G.cb) return menuCombate();
+  if (tp === 'captura') return menuCaptura();
+  if (tp === 'missao' && G.missao && tela === 'raiz') return menuMissao();
+  return menuMundo(tela);
+}
+/* ---------- combate ---------- */
+function menuCombate() {
+  const cb = G.cb, p = G.pj; const I = [];
+  if (cb.modo !== 'inf') {
+    const vc = cb.veic, alvos = vc.inimigos.filter(e => e.estado === 'ativo');
+    alvos.forEach(e => { const n = String(e.eid).slice(1); I.push(menuItem('Atirar em ' + (e.nome || 'alvo ' + n), 'atirar no alvo ' + n, { g: 'Atacar', d: `distância ${DIST[e.dist] || e.dist}` })); });
+    if (cb.modo === 'naval') I.push(menuItem('Lançar torpedos', 'torpedo no alvo ' + String(alvos[0] ? alvos[0].eid : 'v1').slice(1), { g: 'Atacar' }));
+    I.push(menuItem('Manobrar para ganhar posição', 'manobrar para obter vantagem', { g: 'Manobra' }), menuItem('Evadir (dificultar a mira inimiga)', 'evadir', { g: 'Manobra' }), menuItem('Usar fumaça', 'usar fumaça', { g: 'Manobra' }), menuItem('Reparar danos', 'reparar', { g: 'Manobra' }));
+    I.push(menuItem('Romper o contato e recuar', 'recuar', { g: 'Sair' }), menuItem('Render-se', 'me rendo', { g: 'Sair' }));
+    return { titulo: 'Combate — o que você faz?', ctx: 'combate', itens: I };
+  }
+  const ativos = cb.inimigos.filter(e => e.estado === 'ativo'); const arma = armaAtiva(), A = arma ? D.ARMAS[arma.id] : null;
+  const perto = ativos.slice().sort((a, b) => a.dist - b.dist)[0];
+  ativos.slice(0, 6).forEach(e => { const n = e.id.slice(1); I.push(menuItem('Atirar em ' + e.nome + ' (' + n + ')', 'atiro no inimigo ' + n, { g: 'Atacar', d: `${DIST[e.dist]} · ${COBN[e.cob]} · ${hpDesc(e)}` })); });
+  if (perto && A && A.auto) I.push(menuItem('Rajada em ' + perto.nome + ' (' + perto.id.slice(1) + ')', 'rajada no inimigo ' + perto.id.slice(1), { g: 'Atacar', d: 'mais tiros, menos precisão' }));
+  if (perto) I.push(menuItem('Fogo de supressão', 'fogo de supressão no inimigo ' + perto.id.slice(1), { g: 'Atacar', d: 'prende o inimigo atrás da cobertura' }));
+  const corpo = ativos.find(e => e.dist === 0); if (corpo) I.push(menuItem('Corpo a corpo com ' + corpo.nome, 'ataco corpo a corpo o inimigo ' + corpo.id.slice(1), { g: 'Atacar' }));
+  I.push(menuItem('Mirar com calma', 'mirar', { g: 'Posição', d: 'o próximo disparo é mais preciso' }), menuItem('Buscar cobertura', 'busco cobertura', { g: 'Posição' }), menuItem('Avançar', 'avanço', { g: 'Posição' }), menuItem('Recuar', 'recuo', { g: 'Posição' }));
+  I.push(menuItem('Recarregar', 'recarrego', { g: 'Equipamento', d: arma && arma.carga != null ? `${arma.carga}/${A.mag} na arma` : '' }));
+  if (perto && p.inv.some(x => D.ARMAS[x.id] && D.ARMAS[x.id].tipo === 'granada')) I.push(menuItem('Lançar granada em ' + perto.nome, 'jogo granada no inimigo ' + perto.id.slice(1), { g: 'Equipamento' }));
+  if (p.inv.some(x => D.ITENS[x.id] && D.ITENS[x.id].tipo === 'medico')) I.push(menuItem('Usar bandagem / suprimento médico', 'uso bandagem', { g: 'Equipamento' }));
+  if (cb.aliados && cb.aliados.some(a => a.estado !== 'morto')) I.push(menuItem('Ordenar à equipe', 'ordeno à equipe que avance', { g: 'Apoio' }));
+  if (temTag('radio') && !(cb.arty > 0)) I.push(menuItem('Pedir apoio de artilharia', 'pedir artilharia', { g: 'Apoio', d: 'exige rádio e organização militar' }));
+  I.push(menuItem('Negociar rendição do inimigo', 'negocio rendição', { g: 'Sair' }), menuItem('Fugir', 'fugir', { g: 'Sair' }), menuItem('Render-se', 'me rendo', { g: 'Sair', d: 'você será capturado' }));
+  return { titulo: 'Combate — o que você faz?', ctx: 'combate', itens: I };
+}
+/* ---------- cativeiro ---------- */
+function menuCaptura() {
+  const c = G.cena; const I = [];
+  if (c.fase === 'campo') {
+    I.push(menuItem('Planejar uma fuga', 'planejo uma fuga', { g: 'No campo', d: 'semanas de preparo; risco alto' }), menuItem('Manter a cabeça baixa e esperar', 'espero', { g: 'No campo' }), menuItem('Trabalhar e colaborar com os carcereiros', 'trabalho e colaboro', { g: 'No campo', d: 'rende privilégios, mas custa reputação e saúde mental' }));
+    return { titulo: 'Cativeiro — o que você faz?', ctx: 'captura', itens: I };
+  }
+  I.push(menuItem('Resistir em silêncio', 'resisto em silêncio', { g: 'Interrogatório' }), menuItem('Mentir sobre quem sou', 'minto sobre quem sou', { g: 'Interrogatório' }), menuItem('Subornar o guarda', 'subornar o guarda', { g: 'Interrogatório' }), menuItem('Colaborar', 'colaboro', { g: 'Interrogatório', d: 'trai a causa' }), menuItem('Tentar fugir', 'tento fugir', { g: 'Interrogatório' }), menuItem('Esperar', 'espero', { g: 'Interrogatório' }));
+  return { titulo: 'Cativeiro — o que você faz?', ctx: 'captura', itens: I };
+}
+/* ---------- missão em andamento ---------- */
+function menuMissao() {
+  const m = G.missao, p = G.pj, e = estAtual(); const I = [];
+  if (m.dilema) {
+    I.push(menuItem('Ajudar quem está em apuros', 'ajudo os civis', { g: 'Decisão', d: 'custa tempo e expõe você, mas protege vidas' }), menuItem('Seguir adiante sem eles', 'sigo em frente', { g: 'Decisão' }));
+    return { titulo: 'Missão — uma decisão difícil', ctx: 'missao', sub: e.n, itens: I };
+  }
+  const ordem = ['investigar', 'furtivo', 'social', 'engano', 'tecnico', 'forca', 'local', 'improviso', 'fuga', 'esperar'];
+  for (const tag of ordem) { const [ic, rot] = TAG_ROT[tag]; I.push(menuItem(ic + ' ' + rot, '@tag:' + tag, { g: 'Como abordar esta etapa', d: tag === 'esperar' ? 'deixa a situação se mostrar; reduz o alerta' : 'sua melhor perícia: ' + menuMelhorHab(tag) })); }
+  I.push(menuNav('Usar um item…', 'itens', { g: 'Outras' }), menuItem('Ver ideias', '/ideias', { g: 'Outras' }), menuItem('Ver ficha', '/ficha', { g: 'Outras' }), menuItem('Abandonar a missão', 'abandonar missão', { g: 'Outras', d: 'há consequências para sua reputação' }));
+  if (p.habUsos > 0 && D.CLASSES[p.classe].excl.ativa) I.splice(I.length - 4, 0, menuItem('Usar habilidade especial: ' + D.CLASSES[p.classe].excl.ativa.nome, '/habilidade', { g: 'Outras' }));
+  return { titulo: 'Missão — ' + e.n, ctx: 'missao', sub: m.titulo, itens: I };
+}
+/* ---------- mundo livre e submenus ---------- */
+function menuVoltar(tela) { return menuNav('◀ Voltar', tela || 'raiz', { g: '·', volta: true }); }
+function menuMundo(tela) {
+  const p = G.pj, [t0, a1, a2] = String(tela).split(':'); const I = [];
+  if (t0 === 'falar' && a1) {
+    const n = npc(a1); if (n) {
+      [['conversa', 'Conversar'], ['rumores', 'Perguntar sobre rumores'], ['informacoes', 'Pedir informações / segredos'], ['quem', 'Perguntar quem é'], ['trabalho', 'Pedir trabalho ou ordens'], ['persuadir', 'Tentar persuadir'], ['suborno', 'Oferecer suborno'], ['intimidar', 'Intimidar'], ['recrutar', 'Pedir que se junte à sua equipe']].forEach(([k, r]) => I.push(menuItem(r, '@falar:' + n.id + ':' + k, { g: n.nome + ' — ' + n.papel, d: k === 'suborno' ? 'gasta dinheiro' : k === 'intimidar' ? 'arriscado' : '' })));
+      return { titulo: 'Falar com ' + n.nome, ctx: 'sub', sub: `${n.papel} · ${ATIT_TXT[npcAtitude(n)]}`, itens: [menuVoltar('falar')].concat(I) };
+    }
+  }
+  if (t0 === 'raiz') {
+    if (G.missao) I.push(menuItem('Continuar a missão: ' + G.missao.titulo, '/missoes', { g: 'Missão' }));
+    else if (G.ofertas && G.ofertas.length) G.ofertas.forEach((o, i) => { const t = D.MT[o.tpl]; I.push(menuItem('Aceitar: ' + o.titulo, 'aceito a missão ' + (i + 1), { g: 'Trabalhos disponíveis', d: `prazo ${dataStr(o.prazo, true)} · ${o.xp} XP · ${fmtDin(o.din)}` })); });
+    else I.push(menuItem('Pedir ordens / procurar trabalho', '/missoes', { g: 'Trabalhos disponíveis' }));
+    if (p.ptsHab > 0 || p.ptsAtr > 0 || p.espPend > 0) I.push(menuItem('⬆ Evoluir o personagem (há pontos a gastar)', '/evoluir', { g: 'Agora' }));
+    if (p.ferimentos.length || p.hp < p.hpMax) I.push(menuItem('Tratar ferimentos', 'trato meus ferimentos', { g: 'Agora', d: `${Math.round(p.hp)}/${p.hpMax} PV` }));
+    I.push(menuItem('Observar os arredores', 'observo os arredores', { g: 'Explorar' }), menuItem('Procurar um contato', 'procuro um contato', { g: 'Explorar' }), menuNav('Ir a outro lugar daqui…', 'ir', { g: 'Explorar', d: nomeSitio(G.local.sitio) }), menuNav('Viajar para outra região…', 'viajar:0', { g: 'Explorar', d: reg().nome }));
+    const aqui = npcsAqui(); I.push(menuNav('Falar com alguém…', 'falar', { g: 'Pessoas', d: aqui.length ? aqui.length + ' conhecido(s) aqui' : 'puxar conversa com desconhecidos' }));
+    I.push(menuNav('Mercado e comércio…', 'comercio', { g: 'Comércio' }), menuNav('Itens e equipamento…', 'itens', { g: 'Pessoal' }), menuItem('Descansar 1 hora', 'descanso 1 hora', { g: 'Pessoal' }), menuItem('Descansar 4 horas', 'descanso 4 horas', { g: 'Pessoal' }), menuItem('Descansar 8 horas', 'descanso 8 horas', { g: 'Pessoal' }));
+    if (p.habUsos > 0 && D.CLASSES[p.classe].excl.ativa) I.push(menuItem('Habilidade especial: ' + D.CLASSES[p.classe].excl.ativa.nome, '/habilidade', { g: 'Pessoal' }));
+    if (Object.keys(G.conh.segs).length) I.push(menuNav('Informações sigilosas…', 'segredos', { g: 'Pessoal' }));
+    I.push(menuNav('Ficha, mapa, contatos e mais…', 'mais', { g: 'Consultar' }));
+    return { titulo: 'O que você faz?', ctx: 'livre', sub: `${reg().nome} · ${nomeSitio(G.local.sitio)}`, itens: I };
+  }
+  const titulos = { ir: 'Ir a…', viajar: 'Viajar para…', falar: 'Falar com…', comercio: 'Comércio', mercado: 'Mercado', vender: 'Vender', itens: 'Itens e equipamento', segredos: 'Informações sigilosas', mais: 'Consultar' };
+  if (t0 === 'ir') { Object.keys(D.SITIOS).filter(k => k !== G.local.sitio).forEach(k => I.push(menuItem(D.SITIOS[k].nome, '@sitio:' + k, { g: 'Lugares' }))); }
+  else if (t0 === 'viajar') {
+    const pag = +a1 || 0, a = reg(); const arr = Object.values(D.REGIOES).filter(r => r.id !== a.id).map(r => ({ r, d: distKm(a, r) })).sort((x, y) => x.d - y.d); const fatia = arr.slice(pag * 12, pag * 12 + 12);
+    fatia.forEach(x => { const rel = relRegiao(x.r.id); I.push(menuItem(x.r.nome, '@viajar:' + x.r.id, { g: 'Destinos (do mais próximo ao mais distante)', d: `${Math.round(x.d)} km · ${G.conh.regioes[x.r.id] ? { amigo: '🟢 aliada', hostil: '🔴 hostil', neutro: '⚪ neutra', contestado: '🟠 disputada' }[rel] : 'região desconhecida'}` })); });
+    if (pag > 0) I.push(menuNav('◀ Mais próximos', 'viajar:' + (pag - 1), { g: '·', pagina: true })); if ((pag + 1) * 12 < arr.length) I.push(menuNav('Mais distantes ▶', 'viajar:' + (pag + 1), { g: '·', pagina: true }));
+  } else if (t0 === 'falar') {
+    npcsAqui().forEach(n => I.push(menuNav(n.nome + ' — ' + n.papel, 'falar:' + n.id, { g: 'Conhecidos aqui', d: ATIT_TXT[npcAtitude(n)] })));
+    I.push(menuItem('Puxar conversa com alguém que passa', 'converso com alguém', { g: 'Desconhecidos' }), menuItem('Perguntar a alguém sobre rumores', 'pergunto sobre rumores', { g: 'Desconhecidos' }), menuItem('Perguntar sobre informações sigilosas', 'pergunto sobre informações', { g: 'Desconhecidos' }));
+  } else if (t0 === 'comercio') {
+    I.push(menuNav('Comprar no mercado', 'mercado:0:0', { g: 'Comprar' }), menuNav('Comprar no mercado negro', 'mercado:1:0', { g: 'Comprar', d: 'ilegal; aumenta o risco de ser procurado' }), menuNav('Vender um item', 'vender:0', { g: 'Vender' }));
+  } else if (t0 === 'mercado') {
+    const neg = a1 === '1', pag = +a2 || 0; const itens = estoqueMercado(neg); const fatia = itens.slice(pag * MENU_PAG, pag * MENU_PAG + MENU_PAG); G.cena.ultimoMercado = { neg, itens };
+    fatia.forEach(id => { const pr = precoItem(id, neg); I.push(menuItem(nomeItem(id), '@comprar:' + id + ':' + (neg ? 1 : 0), { g: (neg ? 'Mercado negro' : 'Mercado') + ` — você tem ${fmtDin(p.din, p.nac)}`, d: fmtDin(pr, localNac()), off: p.din < pr ? 'dinheiro insuficiente' : null })); });
+    if (pag > 0) I.push(menuNav('◀ Anteriores', `mercado:${neg ? 1 : 0}:${pag - 1}`, { g: '·', pagina: true })); if ((pag + 1) * MENU_PAG < itens.length) I.push(menuNav('Mais itens ▶', `mercado:${neg ? 1 : 0}:${pag + 1}`, { g: '·', pagina: true }));
+  } else if (t0 === 'vender') {
+    const pag = +a1 || 0; const inv = p.inv.filter(e => infoItem(e.id)); const fatia = inv.slice(pag * MENU_PAG, pag * MENU_PAG + MENU_PAG);
+    if (!inv.length) I.push({ r: 'Você não tem nada para vender.', off: 'vazio', g: 'Seu inventário' });
+    fatia.forEach(e => I.push(menuItem(nomeItem(e.id) + (e.qtd > 1 ? ' ×' + e.qtd : ''), '@vender:' + e.id, { g: 'Seu inventário', d: '≈ ' + fmtDin(Math.round(precoItem(e.id, false) * 0.4 * 100) / 100, localNac()) + ' cada' })));
+    if (pag > 0) I.push(menuNav('◀ Anteriores', 'vender:' + (pag - 1), { g: '·', pagina: true })); if ((pag + 1) * MENU_PAG < inv.length) I.push(menuNav('Mais ▶', 'vender:' + (pag + 1), { g: '·', pagina: true }));
+  } else if (t0 === 'itens') {
+    const inv = p.inv.filter(e => infoItem(e.id) && !(D.ITENS[e.id] && D.ITENS[e.id].tipo === 'municao') && !/^mun/.test(e.id));
+    if (!inv.length) I.push({ r: 'Nada utilizável no inventário.', off: 'vazio', g: 'Inventário' });
+    inv.slice(0, 18).forEach(e => { const a = D.ARMAS[e.id], it = D.ITENS[e.id]; I.push(menuItem((a ? 'Empunhar ' : it && it.tipo === 'armadura' ? 'Vestir ' : 'Usar ') + nomeItem(e.id) + (e.qtd > 1 ? ' ×' + e.qtd : ''), '@usar:' + e.id, { g: 'Inventário', d: a ? 'arma' : it ? it.tipo : '' })); });
+    I.push(menuItem('Ver inventário completo', '/inventario', { g: 'Consultar' }));
+  } else if (t0 === 'segredos') {
+    I.push(menuItem('Rever o que sei', '/segredos', { g: 'Informações' }), menuItem('Repassar à minha organização', 'repasso a informação à organização', { g: 'Informações', d: 'ganha confiança e prestígio' }), menuItem('Vender a informação', 'vendo a informação', { g: 'Informações', d: 'rende dinheiro; pode ter consequências' }), menuItem('Guardar em segredo', 'guardo a informação em segredo', { g: 'Informações' }));
+  } else if (t0 === 'mais') {
+    [['/ficha', 'Ficha do personagem'], ['/inventario', 'Inventário'], ['/status', 'Situação atual'], ['/missoes', 'Missões e ordens'], ['/mapa', 'Mapa da situação'], ['/contatos', 'Contatos'], ['/organizacao', 'Organizações'], ['/historico', 'Histórico e notícias'], ['/equipe', 'Minha equipe'], ['/evoluir', 'Evoluir habilidades'], ['/ideias', 'Dicas'], ['/salvar', 'Salvar / exportar campanha'], ['/carregar', 'Carregar campanha'], ['/ajuda', 'Ajuda']].forEach(([c, r]) => I.push(menuItem(r, c, { g: 'Consultar' })));
+  }
+  return { titulo: titulos[t0] || 'Ações', ctx: 'sub', sub: null, itens: [menuVoltar(t0 === 'mercado' || t0 === 'vender' ? 'comercio' : 'raiz')].concat(I) };
+}
+/* ---------- execução dos comandos "@..." ---------- */
+const FALA_TEXTO = { conversa: 'converso com ele', rumores: 'pergunto a ele sobre rumores', informacoes: 'pergunto a ele sobre informações', quem: 'pergunto a ele quem e voce', trabalho: 'pergunto a ele por trabalho', persuadir: 'tento persuadir ele', suborno: 'ofereço suborno a ele', intimidar: 'ameaço ele', recrutar: 'peço a ele que venha comigo' };
+function menuExec(cmd) {
+  const [k, a, b] = String(cmd).slice(1).split(':'); const p = G.pj; const tp = G.cena.tipo;
+  if (k === 'tag') { if (tp !== 'missao' || !G.missao) return say('Não há missão em andamento.'); if (!D.TAGS[a]) return; return agirMissao(TAG_ROT[a][2], a); }
+  if (k === 'usar' && (tp === 'livre' || tp === 'missao')) return usarItem('uso ' + nomeItem(a), a);
+  if (tp !== 'livre') return say('Esta ação não está disponível agora.');
+  if (k === 'sitio') { const w = SITIO_PALAVRA[a]; if (!w) return; irParaSitio(w); return; }
+  if (k === 'viajar') { if (!D.REGIOES[a]) return; return viajar(D.REGIOES[a].nome, a); }
+  if (k === 'comprar') { return comprar('comprar ' + nomeItem(a) + (b === '1' ? ' no mercado negro' : ''), a, b === '1'); }
+  if (k === 'vender') { return vender('vender ' + nomeItem(a), a); }
+  if (k === 'falar') { const n = npc(a); if (!n || n.regiao !== G.local.regiao) return say('Essa pessoa não está aqui.'); G.cena.dialogo = n.id; return falarCom(FALA_TEXTO[b] || FALA_TEXTO.conversa); }
 }
 
 /* ---- 10_criacao.js ---- */
@@ -3649,7 +3819,7 @@ function iniciarCampanha() {
   out('narr', `<p>${fmt(e.desc)} ${atm} ${periodoDia(G.min) === 'manhã' ? 'É manhã cedo.' : 'A luz do dia começa a subir.'}</p>`);
   out('narr', `<p>Você é <b>${esc(p.nome)}</b>, ${p.idade} anos, ${esc(D.CLASSES[p.classe].nome.toLowerCase())}${p.classe2 ? '/' + esc(D.CLASSES[p.classe2].nome.toLowerCase()) : ''} ${esc(D.NACOES[p.nac].adj)}${p.cond !== 'cidadao' ? ' (' + esc(p.condLabel) + ')' : ''}. ${esc(p.historia)} Você serve em: <b>${esc(o.nome)}</b> — ${esc(p.patente)}.</p>`);
   const sup = npc(G.supId); out('narr', `<p>${esc(npcNomeCompleto(sup))} o recebe: ${esc(sup.ap)}.</p>`); dlg(sup.nome, pick(BRIEF[o.tipo] || BRIEF.civil).replace(/^"|"$/g, '"'));
-  gerarOfertas(); mostrarOfertas(); out('sys', 'Você pode agir com <b>suas próprias palavras</b> (“converso com o oficial”, “vou ao mercado”, “viajo para…”, “aceito a missão 1”). Digite <b>/ajuda</b> para ver os comandos ou <b>/ideias</b> para sugestões. O jogo salva sozinho; use <b>/salvar</b> para exportar a campanha.');
+  gerarOfertas(); mostrarOfertas(); out('sys', 'Escolha suas ações no <b>menu</b> abaixo. Se preferir escrever com suas próprias palavras, ative <b>✍ Ação livre</b>. Os comandos (/ficha, /mapa, /ajuda…) ficam em “Ficha, mapa, contatos e mais”; o jogo salva sozinho e <b>/salvar</b> exporta a campanha.');
   mostrarNoticiasNovas(); autosave();
 }
 
@@ -3790,12 +3960,12 @@ function uiRender(blocos) {
   if (primeiro) { const novo = log.scrollHeight - antes; if (novo > log.clientHeight * 0.9) log.scrollTop = primeiro.offsetTop - 12; else log.scrollTop = log.scrollHeight; }
   uiPainel();
 }
-function uiEnviar(txt) {
-  txt = (txt || '').trim(); if (!txt) return;
+function uiEnviar(txt, rotulo) {
+  txt = (txt || '').trim(); if (!txt) return; UI.tela = 'raiz';
   if (G && G.fase === 'criacao' && /^\/?assistente$/i.test(txt)) { wzReabrir(); return; }
   if (G && G.fase === 'morto' && /^\/novo$/i.test(txt)) { const l = $('log'); const u = document.createElement('div'); u.className = 'user'; u.textContent = txt; l.appendChild(u); wzAbrir({ continua: true }); return; }
-  const log = $('log'); const u = document.createElement('div'); u.className = 'user'; u.textContent = txt; log.appendChild(u);
-  if (UI.hist[UI.hist.length - 1] !== txt) UI.hist.push(txt); UI.hi = UI.hist.length;
+  const log = $('log'); const u = document.createElement('div'); u.className = 'user'; u.textContent = rotulo || txt; log.appendChild(u);
+  if (!rotulo && UI.hist[UI.hist.length - 1] !== txt) UI.hist.push(txt); UI.hi = UI.hist.length;
   uiRender(processar(txt));
 }
 const sinalAbs = n => (n > 0 ? '+' : '') + n;
@@ -3826,15 +3996,39 @@ function uiPainel() {
   chips.innerHTML = `<span class="chip"><b>${dataStr(G.dia, true)}</b> ${horaStr(G.min)}</span><span class="chip">📍 <b>${esc(r.nome)}</b></span><span class="chip">${esc(D.CTRL_NOME[ctrlDe(r.id)] || '')}</span>`;
   uiChips();
 }
+function uiLivre() { try { return localStorage.getItem('sombras_livre') === '1'; } catch (e) { return false; } }
+function uiSetLivre(v) { try { localStorage.setItem('sombras_livre', v ? '1' : '0'); } catch (e) { } }
+function uiMenuAtivo() { return !!G && (G.fase === 'jogo' && G.pj || G.fase === 'morto'); }
 function uiChips() {
-  const c = $('chips2'); let l = [];
-  if (!G || !G.fase || G.fase === 'titulo') l = []; else if (G.fase === 'criacao') l = ['assistente', 'voltar', '/ficha'].concat(G.cr && ['atr', 'habs'].includes(G.cr.passo) ? ['padrão', 'pronto'] : G.cr && G.cr.passo === 'equip' ? ['pronto'] : G.cr && G.cr.passo === 'ficha' ? ['aprovar'] : G.cr && G.cr.passo === 'nome' && G.cr.sub === 'nome' ? ['aleatório'] : G.cr && G.cr.sub === 'aparencia' ? ['pular'] : G.cr && G.cr.passo === 'hist' && G.cr.sub === 'texto' ? ['pular'] : []);
-  else if (G.fase === 'morto') l = ['/novo', '/carregar'];
-  else if (G.cena.tipo === 'combate') l = G.cb && G.cb.modo !== 'inf' ? ['Atirar no alvo 1', 'Manobrar para obter vantagem', 'Evadir', 'Usar fumaça', 'Reparar', 'Recuar'] : ['Atirar no inimigo 1', 'Mirar com calma', 'Buscar cobertura', 'Avançar', 'Recuar', 'Recarregar', 'Jogar granada', 'Usar bandagem', 'Negociar rendição', 'Fugir'];
-  else if (G.cena.tipo === 'captura') l = ['Resistir em silêncio', 'Mentir sobre quem sou', 'Subornar o guarda', 'Colaborar', 'Tentar fugir', 'Esperar'];
-  else if (G.cena.tipo === 'missao') l = ['Observar a área', 'Aproximar-me furtivamente', 'Conversar com alguém', 'Usar o terreno', 'Improvisar', 'Esperar', '/ideias'];
-  else l = ['/missoes', 'Observar os arredores', 'Conversar com alguém', 'Ir ao mercado', 'Descansar 8 horas', 'Procurar um contato', 'Viajar', '/ideias'];
+  const c = $('chips2'), bar = $('inputbar'); const menu = uiMenuAtivo();
+  const chave = G ? G.fase + '|' + (G.cena && G.cena.tipo) + '|' + (G.missao ? G.missao.est : '') : ''; if (UI.chave !== chave) { UI.chave = chave; UI.tela = 'raiz'; } UI.tela = UI.tela || 'raiz';
+  document.body.classList.toggle('menu-on', menu); bar.style.display = menu && !uiLivre() ? 'none' : '';
+  if (menu) { uiMenu(c); return; }
+  c.className = ''; let l = [];
+  if (!G || !G.fase || G.fase === 'titulo') l = []; else if (G.fase === 'criacao') l = ['assistente', 'voltar', '/ficha'].concat(G.cr && ['atr', 'habs'].includes(G.cr.passo) ? ['padrão', 'pronto'] : G.cr && G.cr.passo === 'equip' ? ['pronto'] : G.cr && G.cr.passo === 'ficha' ? ['aprovar'] : G.cr && G.cr.passo === 'nome' && G.cr.sub === 'nome' ? ['aleatório'] : G.cr && G.cr.sub === 'aparencia' ? ['pular'] : []);
   c.innerHTML = l.map(x => `<button data-c="${esc(x)}">${esc(x)}</button>`).join('');
+}
+/* ---------- menu de ações pré-definidas ---------- */
+function uiMenu(c) {
+  let m; try { m = menuAcoes(UI.tela); } catch (e) { m = { titulo: 'Ações', itens: [] }; console.error(e); }
+  if (!m.itens.length && UI.tela !== 'raiz') { UI.tela = 'raiz'; m = menuAcoes('raiz'); }
+  UI.itens = m.itens; c.className = 'mn' + (UI.fechado ? ' fechado' : '');
+  let h = `<div class="mn-top"><div class="mn-t"><b>${esc(m.titulo)}</b>${m.sub ? `<span class="dim"> · ${esc(m.sub)}</span>` : ''}</div><button type="button" class="mn-b ${uiLivre() ? 'on' : ''}" data-mn="livre" title="Mostrar o campo de texto para escrever qualquer ação com suas palavras">✍ Ação livre</button><button type="button" class="mn-b" data-mn="fechar" title="Recolher / expandir">${UI.fechado ? '▴ Ações' : '▾'}</button></div>`;
+  if (!UI.fechado) {
+    let g = null, n = 0, abre = false; const itens = m.itens;
+    itens.forEach((it, i) => {
+      if (it.g !== g) { if (abre) h += '</div>'; g = it.g; abre = true; h += `${g && g !== '·' ? `<div class="mn-g">${esc(g)}</div>` : ''}<div class="mn-grid">`; }
+      const num = !it.off && n < 9 ? ++n : 0;
+      h += `<button type="button" class="mn-i ${it.tela ? 'nav' : ''} ${it.volta ? 'volta' : ''}" data-m="${i}" ${it.off ? `disabled title="${esc(it.off)}"` : ''}>${num ? `<kbd>${num}</kbd>` : '<kbd></kbd>'}<span><b>${esc(it.r)}</b>${it.d ? `<small>${esc(it.d)}</small>` : ''}</span></button>`;
+    });
+    if (abre) h += '</div>';
+  }
+  c.innerHTML = h;
+}
+function uiMenuClick(i) {
+  const it = UI.itens && UI.itens[i]; if (!it || it.off) return;
+  if (it.tela) { UI.tela = it.tela; uiChips(); const c = $('chips2'); c.scrollTop = 0; return; }
+  uiEnviar(it.c, it.r);
 }
 function retomar(msg) {
   $('title').classList.remove('on'); $('log').innerHTML = ''; G.avisos = [];
@@ -3857,7 +4051,14 @@ function uiInit() {
   $('fileCarregar').onchange = e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { $('txtCarregar').value = String(r.result); }; r.readAsText(f); };
   $('bCarregarOk').onclick = () => { const t = $('txtCarregar').value.trim(); if (!t) { $('msgCarregar').textContent = 'Cole o registro ou escolha um arquivo.'; return; } const bkp = G; if (importarRegistro(t)) { if (!G.avisos) G.avisos = []; $('mCarregar').classList.remove('on'); retomar('Campanha restaurada a partir do registro.'); } else { G = bkp; $('msgCarregar').textContent = 'Não consegui ler este registro. Verifique se o texto está completo (incluindo a seção de dados).'; } };
   $('menuBtn').onclick = () => $('side').classList.toggle('on');
-  document.addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) { $('side').classList.remove('on'); if (!G || !G.fase || G.fase === 'titulo') return; uiEnviar(b.dataset.c); $('inp').focus(); } });
+  document.addEventListener('click', e => {
+    const mi = e.target.closest('[data-m]'); if (mi) { uiMenuClick(+mi.dataset.m); return; }
+    const mb = e.target.closest('[data-mn]'); if (mb) { if (mb.dataset.mn === 'livre') { uiSetLivre(!uiLivre()); uiChips(); if (uiLivre()) $('inp').focus(); } else { UI.fechado = !UI.fechado; uiChips(); } return; } const b = e.target.closest('button[data-c]'); if (b) { $('side').classList.remove('on'); if (!G || !G.fase || G.fase === 'titulo') return; uiEnviar(b.dataset.c); $('inp').focus(); } });
+  document.addEventListener('keydown', e => {
+    if (!uiMenuAtivo() || e.ctrlKey || e.metaKey || e.altKey || /^(TEXTAREA|INPUT|SELECT)$/.test((e.target.tagName || ''))) return; if (document.body.classList.contains('wz-on')) return;
+    if (/^[1-9]$/.test(e.key)) { const bs = [...document.querySelectorAll('#chips2 .mn-i:not([disabled])')].filter(b => b.querySelector('kbd').textContent === e.key); if (bs[0]) { e.preventDefault(); uiMenuClick(+bs[0].dataset.m); } }
+    else if (e.key === 'Escape' || e.key === 'Backspace') { if (UI.tela !== 'raiz') { e.preventDefault(); UI.tela = 'raiz'; uiChips(); } }
+  });
   const inp = $('inp'); const grow = () => { inp.style.height = 'auto'; inp.style.height = Math.min(130, inp.scrollHeight) + 'px'; };
   inp.addEventListener('input', () => { grow(); uiSug(); });
   inp.addEventListener('keydown', e => {
